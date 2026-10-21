@@ -17,7 +17,7 @@ class Producto(Base):
     stock = Column(Integer, nullable=False)
 
     ## para la clave foranea de categoria 
-    fk_id_column = Column(Integer, ForeignKey("categoria.id_categoria"), nullable=False)
+    fk_id_categoria = Column(Integer, ForeignKey("categoria.id_categoria"), nullable=False)
 
 class Categoria(Base):
     __tablename__ = "categoria"

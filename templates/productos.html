@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+<body>
+    <h1>Agregar Producto</h1>
+    <form action="" method="post">
+        <label for="">Nombre del producto</label>
+        <input type="text" name="nombre">
+        <label for="">Precio del producto</label>
+        <input type="text" name="precio">
+        <label for="">Stock del producto</label>
+        <input type="text" name="stock">
+    ### aca hacemos un select para mostrar todas las categorias que tenemos
+    <select name="id_categoria">
+        {% for cat in categorias %}
+        <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
+        {% endfor %}
+    </select>
+     <button type="submit"> Agregar</button>
+    </form>
+
+    <h2>Lista de Productos</h2>
+    <ul>
+        {% for pro in productos %}
+        <li>{{pro.nombre}} - ${{pro.precio}} - {{pro.categoria.nombre}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
