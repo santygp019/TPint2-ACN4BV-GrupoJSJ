@@ -7,7 +7,7 @@ app = Flask(__name__)
 crearTablas()
 
 
-@app.route("/", method=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 
 def productos():
     db_cursor = Session()

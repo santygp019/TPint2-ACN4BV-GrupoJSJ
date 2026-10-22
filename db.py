@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
+
 motorDB = create_engine("sqlite:///ferreteria.jsj.db")
 
 Base = declarative_base()
@@ -37,5 +38,3 @@ def crearTablas():
     db_cursor.add(Categoria(nombre="Electronica"))
     db_cursor.commit()
     db_cursor.close()
-
-crearTablas()
