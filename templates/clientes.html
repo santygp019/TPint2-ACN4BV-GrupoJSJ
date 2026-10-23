@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+</head>
+<body>
+    <h1>Clientes</h1>
+
+    <h2>Agregar Cliente</h2>
+    {% if error %}
+    <p style="color: red;">{{error}}</p>
+    {% endif %}
+    <form action="" method="post">
+        <label for="">Nombre</label>
+        <input type="text" name="nombre">
+        <label for="">Email</label>
+        <input type="text" name="email">
+        <label for="">Teléfono</label>
+        <input type="text" name="telefono">
+        <button type="submit"> Agregar</button>
+    </form>
+
+    <h2>Lista de Clientes</h2>
+    <ul>
+        {% for cli in clientes %}
+        <li>
+            {{cli.nombre}} - {{cli.email}} - {{cli.telefono}}
+            <a href="{{url_for('modificarCliente', id_cliente=cli.id_cliente)}}">Editar</a>
+            <form action="{{url_for('bajaCliente', id_cliente=cli.id_cliente)}}" method="post" style="display: inline;" onsubmit="return confirm('¿Dar de baja a este cliente?')">
+                <button type="submit">Dar de baja</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{url_for('home')}}">Volver al Inicio</a>
+</body>
+</html>

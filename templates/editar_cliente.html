@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente</title>
+</head>
+<body>
+    <h1>Editar Cliente</h1>
+
+    {% if error %}
+    <p style="color: red;">{{error}}</p>
+    {% endif %}
+    <form action="" method="post">
+        <label for="">Nombre</label>
+        <input type="text" name="nombre" value="{{cliente.nombre}}">
+        <label for="">Email</label>
+        <input type="text" name="email" value="{{cliente.email or ''}}">
+        <label for="">Teléfono</label>
+        <input type="text" name="telefono" value="{{cliente.telefono or ''}}">
+        <button type="submit"> Guardar</button>
+    </form>
+
+    <a href="{{url_for('cargarCliente')}}">Volver a Clientes</a>
+</body>
+</html>
