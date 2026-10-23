@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 
-motorDB = create_engine("sqlite:///ferreteria.jsj.db")
+motorDB = create_engine("sqlite:///ferreteriaJSJ.db")
 
 Base = declarative_base()
 
@@ -19,12 +19,14 @@ class Producto(Base):
 
     ## para la clave foranea de categoria 
     fk_id_categoria = Column(Integer, ForeignKey("categoria.id_categoria"), nullable=False)
+    ## esto es para relacionar las tablas producto y categoria
+    categoria = relationship("Categoria")
 
 class Categoria(Base):
     __tablename__ = "categoria"
 
     id_categoria = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String, nullable=False)
+    nombre = Column(String, unique=True, nullable=False)
 
 
 
@@ -33,8 +35,13 @@ class Categoria(Base):
 def crearTablas():
     Base.metadata.create_all(motorDB)
 
-    ## Esto es para hacer consultas a la BD
     db_cursor = Session()
-    db_cursor.add(Categoria(nombre="Electronica"))
-    db_cursor.commit()
+    categoria_existente = (
+        db_cursor.query(Categoria).filter_by(nombre="Electronica").first()
+    )
+    ## Esto es para hacer consultas a la BD
+    
+    if not categoria_existente:
+        db_cursor.add(Categoria(nombre="Electronica"))
+        db_cursor.commit()
     db_cursor.close()
