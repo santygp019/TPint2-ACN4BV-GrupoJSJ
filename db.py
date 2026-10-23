@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 
@@ -27,6 +27,17 @@ class Categoria(Base):
 
     id_categoria = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String, unique=True, nullable=False)
+
+
+class Cliente(Base):
+    __tablename__ = "cliente"
+
+    id_cliente = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String, nullable=False)
+    email = Column(String)
+    telefono = Column(String)
+    ## la baja es logica: el cliente deja de mostrarse pero se conserva su historial de compras
+    activo = Column(Boolean, nullable=False, default=True)
 
 
 
