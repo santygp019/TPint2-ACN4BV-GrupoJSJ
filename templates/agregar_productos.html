@@ -14,7 +14,7 @@
         <input type="text" name="precio">
         <label for="">Stock del producto</label>
         <input type="text" name="stock">
-    ### aca hacemos un select para mostrar todas las categorias que tenemos
+
     <select name="id_categoria">
         {% for cat in categorias %}
         <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
@@ -29,5 +29,7 @@
         <li>{{pro.nombre}} - ${{pro.precio}} - {{pro.categoria.nombre}}</li>
         {% endfor %}
     </ul>
+
+    <a href="{{url_for('home')}}">Volver al Inicio</a>    
 </body>
 </html>

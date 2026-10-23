@@ -6,11 +6,18 @@
     <title>Lista de Productos</title>
 </head>
 <body>
-        <h1>Lista de Productos</h1>
+    <h2>Lista de Productos</h2>
+        {% for cat in categorias %}
+        <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
+        {% endfor %}
+
     <ul>
         {% for pro in productos %}
         <li>{{pro.nombre}} - ${{pro.precio}} - {{pro.categoria.nombre}}</li>
         {% endfor %}
     </ul>
+
+
+    <a href="{{url_for('home')}}">Volver al Inicio</a>
 </body>
 </html>

@@ -1,14 +1,13 @@
 from flask import Flask, request, render_template, redirect, url_for
-from db import Session, Producto, Categoria, relationship
+from db import Session, Producto, Categoria
 
 
-def productos():
+def agregarProductos():
     db_cursor = Session()
 
     ## capturamos nuestro formulario 
     if request.method == "POST":
 
-## aca instanciamos un nuevo producto donde cada valor viene del formulario        
         nuevo_producto = Producto(
             nombre = request.form["nombre"],
             precio =float(request.form["precio"]),
@@ -20,9 +19,18 @@ def productos():
         db_cursor.commit()
         db_cursor.close()
 
-        return redirect(url_for("mostrarProducto"))
+        return redirect(url_for("cargarProducto"))
 
  
     productos =  db_cursor.query(Producto).all()
     categorias = db_cursor.query(Categoria).all() ## Esto es igual a hacer un select * from categoria
-    return render_template("productos.html", productos=productos, categorias=categorias)
+    return render_template("agregar_productos.html", productos=productos, categorias=categorias)
+
+
+def mostrarListaProducto():
+
+    db_cursor = Session()
+
+    productos = db_cursor.query(Producto).all()
+
+    return render_template("lista_productos.html", productos=productos)
