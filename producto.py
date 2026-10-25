@@ -1,6 +1,20 @@
 from flask import Flask, request, render_template, redirect, url_for
 from db import Session, Producto, Categoria
 
+## Valida los datos del formulario, devuelve un mensaje de error o None si esta todo bien
+def validarProducto(nombre, precio, stock):
+    if not nombre:
+        return "El nombre es obligatorio."
+
+    if not precio or not stock:
+        return "El precio y el stock no pueden estar vacios"
+
+    if float(precio) <= 0 or int(stock) <=0:
+        return "El precio o el stock no pueden ser igual a 0"
+
+    return None
+
+
 
 def agregarProductos():
     db_cursor = Session()
@@ -25,6 +39,40 @@ def agregarProductos():
     productos =  db_cursor.query(Producto).all()
     categorias = db_cursor.query(Categoria).all() ## Esto es igual a hacer un select * from categoria
     return render_template("agregar_productos.html", productos=productos, categorias=categorias)
+
+def editarProducto(id_producto):
+    db_cursor = Session()
+    producto = db_cursor.query(Producto).filter_by(id_producto=id_producto).first()
+
+    if not producto:
+        db_cursor.close()
+        return redirect(url_for("cargarProducto"))
+
+    error = None
+
+    if request.method == "POST":
+        nombre = request.form["nombre"].strip()
+        precio = request.form["precio"].strip()
+        stock = request.form["stock"].strip()
+
+        error = validarProducto(nombre, precio, stock)
+
+        if not error:
+            producto.nombre = nombre
+            producto.precio = float(precio)
+            producto.stock = int(stock)
+            db_cursor.commit()
+            db_cursor.close()
+
+            return redirect(url_for("cargarProducto"))
+
+    pagina = render_template("editar_producto.html", producto=producto, error=error)
+    db_cursor.close()
+
+    return pagina
+
+
+
 
 
 def mostrarListaProducto():

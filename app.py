@@ -1,6 +1,6 @@
 ﻿from db import crearTablas, Session, Producto
 from flask import Flask, render_template
-from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico
+from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente
 from compras import cargar_formulario_compra, procesar_nueva_compra
 from proveedores import agregarProveedor
@@ -18,6 +18,10 @@ def cargarProducto():
 
     return agregarProductos()
 
+@app.route("/editar_producto/<int:id_producto>", methods=["GET", "POST"])
+def modificarProducto(id_producto):
+
+    return editarProducto(id_producto)
 
 @app.route("/lista_productos")
 def verListaProductos():
@@ -43,9 +47,6 @@ def bajaCliente(id_cliente):
     return darBajaCliente(id_cliente)
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 
 @app.route("/compras/nueva", methods=["GET"])
 def ver_compras():
@@ -63,3 +64,9 @@ def verStockCritico():
 @app.route("/proveedores", methods=["GET", "POST"])
 def cargarProveedor():
     return agregarProveedor()
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

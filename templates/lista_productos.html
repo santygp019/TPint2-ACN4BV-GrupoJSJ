@@ -7,13 +7,15 @@
 </head>
 <body>
     <h2>Lista de Productos</h2>
+    <select name="id_categoria" >
         {% for cat in categorias %}
         <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
         {% endfor %}
-
+    </select>
     <ul>
         {% for pro in productos %}
         <li>{{pro.nombre}} - ${{pro.precio}} - {{pro.categoria.nombre}}</li>
+        <a href="{{url_for('modificarProducto', id_producto=pro.id_producto)}}"> Editar Producto</a>
         {% endfor %}
     </ul>
 
