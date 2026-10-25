@@ -71,16 +71,31 @@ def editarProducto(id_producto):
 
     return pagina
 
+## Baja logica: no borramos la fila para no perder el historial del producto
+def eliminarProducto(id_producto):
+    db_cursor = Session()
 
+    producto = db_cursor.query(Producto).filter_by(id_producto=id_producto).first()
 
+    if producto:
+        producto.activo = False
+        db_cursor.commit()
+
+    db_cursor.close()
+
+    return redirect(url_for("verListaProductos"))
 
 
 def mostrarListaProducto():
     db_cursor = Session()
+    try: 
+     productos = db_cursor.query(Producto).filter_by(activo=True).all()
+     categorias = db_cursor.query(Categoria).all()
+     return render_template("lista_productos.html", productos=productos, categorias=categorias)
+    finally:
+        db_cursor.close()
 
-    productos = db_cursor.query(Producto).all()
 
-    return render_template("lista_productos.html", productos=productos)
 
 def reporte_stock_critico():
     db_cursor = Session()
@@ -90,3 +105,5 @@ def reporte_stock_critico():
     db_cursor.close()
     
     return pagina_html
+
+

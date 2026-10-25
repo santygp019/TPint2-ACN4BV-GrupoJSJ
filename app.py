@@ -1,6 +1,6 @@
 ﻿from db import crearTablas, Session, Producto
 from flask import Flask, render_template
-from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto
+from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente
 from compras import cargar_formulario_compra, procesar_nueva_compra
 from proveedores import agregarProveedor
@@ -22,6 +22,12 @@ def cargarProducto():
 def modificarProducto(id_producto):
 
     return editarProducto(id_producto)
+
+@app.route("/eliminar_producto/<int:id_producto>")
+def borrarProducto(id_producto):
+
+    return eliminarProducto(id_producto)
+
 
 @app.route("/lista_productos")
 def verListaProductos():

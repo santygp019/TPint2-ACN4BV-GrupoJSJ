@@ -5,8 +5,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 motorDB = create_engine("sqlite:///ferreteriaJSJ.db")
 
 Base = declarative_base()
-
-Session = sessionmaker(bind=motorDB)
+### se le agrego el expire debido a que se pierden los datos al hacer la consulta y me daba error la categoria
+Session = sessionmaker(bind=motorDB, expire_on_commit=False)
 
 
 class Producto(Base):
@@ -16,6 +16,7 @@ class Producto(Base):
     nombre = Column(String, nullable=False)
     precio = Column(Float, nullable=False)
     stock = Column(Integer, nullable=False)
+    activo = Column(Boolean, default=True)
 
     ## para la clave foranea de categoria 
     fk_id_categoria = Column(Integer, ForeignKey("categoria.id_categoria"), nullable=False)
