@@ -28,9 +28,17 @@ def agregarProductos():
 
 
 def mostrarListaProducto():
-
     db_cursor = Session()
 
     productos = db_cursor.query(Producto).all()
 
     return render_template("lista_productos.html", productos=productos)
+
+def reporte_stock_critico():
+    db_cursor = Session()
+    productos_criticos = db_cursor.query(Producto).filter(Producto.stock <= 5).all()
+    
+    pagina_html = render_template("stock_critico.html", productos=productos_criticos)
+    db_cursor.close()
+    
+    return pagina_html

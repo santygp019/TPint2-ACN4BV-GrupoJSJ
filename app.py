@@ -1,7 +1,9 @@
-﻿from db import crearTablas
+﻿from db import crearTablas, Session, Producto
 from flask import Flask, render_template
-from producto import agregarProductos, mostrarListaProducto
+from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico
 from clientes import agregarCliente, editarCliente, darBajaCliente
+from compras import cargar_formulario_compra, procesar_nueva_compra
+from proveedores import agregarProveedor
 
 app = Flask(__name__)
 
@@ -44,3 +46,20 @@ def bajaCliente(id_cliente):
 if __name__ == "__main__":
     app.run(debug=True)
 
+
+@app.route("/compras/nueva", methods=["GET"])
+def ver_compras():
+    return cargar_formulario_compra()
+
+@app.route("/compras/nueva", methods=["POST"])
+def registrar_compras():
+    return procesar_nueva_compra()
+
+
+@app.route("/reportes/stock_critico")
+def verStockCritico():
+    return reporte_stock_critico()
+    
+@app.route("/proveedores", methods=["GET", "POST"])
+def cargarProveedor():
+    return agregarProveedor()

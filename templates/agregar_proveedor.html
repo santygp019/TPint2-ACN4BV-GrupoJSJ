@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores</title>
+</head>
+<body>
+    <h1>Agregar Proveedor</h1>
+    
+    <form action="" method="post">
+        <label for="nombre">Nombre del proveedor:</label>
+        <input type="text" name="nombre" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <h2>Lista de Proveedores</h2>
+    <ul>
+        {% for prov in proveedores %}
+            <li>{{ prov.nombre }}</li>
+        {% else %}
+            <li>No hay proveedores registrados aún.</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{{ url_for('ver_compras') }}">Ir a registrar una compra</a> | 
+    <a href="{{ url_for('home') }}">Volver al Inicio</a>
+</body>
+</html>

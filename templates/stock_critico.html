@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Crítico</title>
+</head>
+<body>
+    <h1>Reporte de Stock Crítico</h1>
+    <p>Los siguientes productos tienen 5 unidades o menos en inventario:</p>
+
+    <ul>
+        {% for pro in productos %}
+            <li style="color: red;">
+                <b>{{ pro.nombre }}</b> - Stock actual: {{ pro.stock }} 
+                (Categoría: {{ pro.categoria.nombre }})
+            </li>
+        {% else %}
+            <li style="color: green;">El inventario está en niveles óptimos. No hay stock crítico.</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{{ url_for('home') }}">Volver al Inicio</a>
+</body>
+</html>

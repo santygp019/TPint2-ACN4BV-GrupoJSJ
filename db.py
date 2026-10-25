@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean, DateTime,func
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 
@@ -39,10 +39,35 @@ class Cliente(Base):
     ## la baja es logica: el cliente deja de mostrarse pero se conserva su historial de compras
     activo = Column(Boolean, nullable=False, default=True)
 
+class Proveedor(Base):
+    __tablename__ = "proveedor"
+    
+    id_proveedor = Column(Integer,primary_key=True,autoincrement=True )
+    nombre = Column(String, nullable=False)
+    
+class Compra(Base):
+    __tablename__ = "compra"
+    
+    id_compra = Column(Integer, primary_key=True, autoincrement=True)
+    fecha = Column(DateTime, default=func.now())
+    fk_id_proveedor = Column(Integer, ForeignKey("proveedor.id_proveedor"),nullable=False)
 
-
+    Proveedor = relationship("Proveedor")
+    detalles = relationship("DetalleCompra", back_populates="compra")
 ### Funcion para crear la tablas
 
+class DetalleCompra(Base):
+    __tablename__ = "detalle_compra"
+    
+    id_detalle = Column(Integer, primary_key=True, autoincrement=True)
+    fk_id_compra = Column(Integer, ForeignKey("compra.id_compra"), nullable=False)
+    fk_id_producto = Column(Integer, ForeignKey("producto.id_producto"), nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    precio_compra = Column(Float, nullable=False)
+    
+    compra = relationship("Compra", back_populates="detalles")
+    producto = relationship("Producto")
+    
 def crearTablas():
     Base.metadata.create_all(motorDB)
 
