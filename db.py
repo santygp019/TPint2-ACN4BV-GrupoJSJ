@@ -35,7 +35,7 @@ class Venta(Base):
     id_venta = Column(Integer, primary_key=True, autoincrement=True)
     fecha = Column(DateTime, default=func.now())
     fk_id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"), nullable=True)
-
+    detalles = relationship("DetalleVenta", back_populates="venta")
 class DetalleVenta(Base):
     __tablename__ = "detalle_venta"
 

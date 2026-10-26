@@ -21,7 +21,7 @@ def ventaProducto():
                 detalle = DetalleVenta(
                     fk_id_venta = nueva_venta.id_venta,
                     fk_id_producto = producto.id_producto,
-                    cantidad = cantidad_vendidad,
+                    cantidad = cantidad_vendida,
                     precio_venta = producto.precio
                 )
                 db_cursor.add(detalle)

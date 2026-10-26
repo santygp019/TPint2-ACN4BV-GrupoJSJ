@@ -22,7 +22,8 @@
             <th>{{pro.nombre}}</th>
             <th>{{pro.precio}}</th>
             <th>{{pro.stock}}</th>
-            <th><form action="">
+            <th>
+            <form action="{{url_for('seccionVentas')}}" method="POST" style="display: inline-block;">
                 <!-- El input del hidden esta para que le avise al backend el id del producto para poder descontarlo-->>
                 <input type="hidden" name="id_producto" value="{{pro.id_producto}}">
                 <input type="number" name="cantidad" min="1" max="{{pro.stock}}" value="1" required>
