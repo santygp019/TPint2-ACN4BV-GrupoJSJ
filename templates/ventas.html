@@ -27,7 +27,7 @@
                 <!-- El input del hidden esta para que le avise al backend el id del producto para poder descontarlo-->>
                 <input type="hidden" name="id_producto" value="{{pro.id_producto}}">
                 <input type="number" name="cantidad" min="1" max="{{pro.stock}}" value="1" required>
-                <button type="submit"> Vender</button>
+                <button type="submit" onclick="alert('Se descontador ' + this.form.cantidad.value + ' unidades del stock exitosamente');"> Vender</button>
             </form></th>
          </tr>
          {% endfor %}       
