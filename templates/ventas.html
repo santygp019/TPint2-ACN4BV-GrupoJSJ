@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo de Productos</title>
+</head>
+<body> 
+    <h1>Catalogo de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+            <th>Nombre del Producto</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for pro in productos %}
+         <tr>
+            <th>{{pro.nombre}}</th>
+            <th>{{pro.precio}}</th>
+            <th>{{pro.stock}}</th>
+            <th><form action="">
+                <!-- El input del hidden esta para que le avise al backend el id del producto para poder descontarlo-->>
+                <input type="hidden" name="id_producto" value="{{pro.id_producto}}">
+                <input type="number" name="cantidad" min="1" max="{{pro.stock}}" value="1" required>
+                <button type="submit"> Vender</button>
+            </form></th>
+         </tr>
+         {% endfor %}       
+        </tbody>
+    </table>
+    <br>
+  
+    <a href="{{url_for('home')}}">Volver al Inicio</a>
+    
+</body>
+</html>

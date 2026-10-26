@@ -29,6 +29,25 @@ class Categoria(Base):
     id_categoria = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String, unique=True, nullable=False)
 
+class Venta(Base):
+    __tablename__ = "venta"
+
+    id_venta = Column(Integer, primary_key=True, autoincrement=True)
+    fecha = Column(DateTime, default=func.now())
+    fk_id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"), nullable=True)
+
+class DetalleVenta(Base):
+    __tablename__ = "detalle_venta"
+
+    id_detalle = Column(Integer, primary_key=True, autoincrement=True)
+    fk_id_venta = Column(Integer, ForeignKey("venta.id_venta"), nullable=False)
+    fk_id_producto = Column(Integer, ForeignKey("producto.id_producto"), nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    ### Aca guardamos el precio de la venta por si en un futuro el precio aumenta el historial no se modifica
+    precio_venta = Column(Float, nullable=False)
+
+    venta = relationship("Venta", back_populates="detalles")
+    producto = relationship("Producto")
 
 class Cliente(Base):
     __tablename__ = "cliente"
