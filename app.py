@@ -79,6 +79,9 @@ def cargarProveedor():
     return agregarProveedor()
 
 
+@app.errorhandler(404)
+def paginaNoEncontrada(e):
+    return render_template("404.html"), 404
 
 
 if __name__ == "__main__":
