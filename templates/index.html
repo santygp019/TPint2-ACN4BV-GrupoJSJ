@@ -1,19 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferreteria JSJ</title>
+    <title>Ferretería JSJ</title>
+    <!-- Enlace a tu archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
-    <h1>Ferreteria JSJ</h1>
-    <a href="{{url_for('cargarProducto')}}">Agregar un Producto Nuevo</a>
     
-    <a href="{{url_for('verListaProductos')}}"> Ver Lista de Productos</a>
-    <a href="{{url_for('cargarCliente')}}"> Clientes</a>
-    <a href="/compras/nueva"> Registrar Compra a Proveedor</a>
-    <a href="{{url_for('cargarProveedor')}}"> Gestionar Proveedores</a>
-    <a href="{{url_for('verStockCritico')}}"> Ver Reporte de Stock Crítico</a>
-    <a href="{{url_for('seccionVentas')}}">Ver Catalogo de productos</a>
+    <header class="hw-header">
+        <div class="hw-brand">
+            <h1>Ferretería JSJ</h1>
+        </div>
+        
+        <nav class="hw-navbar">
+            <ul class="hw-nav-list">
+                <!-- Gestión de Productos -->
+                <li><a href="{{url_for('cargarProducto')}}" class="hw-nav-link">Nuevo Producto</a></li>
+                <li><a href="{{url_for('verListaProductos')}}" class="hw-nav-link">Lista de Productos</a></li>
+                
+                <!-- Destacamos el stock crítico con una clase especial para que llame la atención -->
+                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link warning-link">Stock Crítico</a></li>
+                
+                <!-- Gestión de Personas -->
+                <li><a href="{{url_for('cargarCliente')}}" class="hw-nav-link">Clientes</a></li>
+                <li><a href="{{url_for('cargarProveedor')}}" class="hw-nav-link">Proveedores</a></li>
+                
+                <!-- Operaciones -->
+                <li><a href="/compras/nueva" class="hw-nav-link">Comprar a Proveedor</a></li>
+                
+                <!-- Resaltamos las ventas como la acción principal -->
+                <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link primary-link">Catálogo y Ventas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Acá abajo iría el resto del contenido de tu página (tablas, formularios, etc.) -->
+    <main class="hw-main-content">
+        <h2>Panel de Control</h2>
+        <p>Seleccione una opción del menú superior para comenzar.</p>
+    </main>
+
 </body>
 </html>

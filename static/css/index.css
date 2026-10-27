@@ -1,0 +1,105 @@
+
+:root {
+  --hw-dark: #111827;         
+  --hw-gray: #1f2937;         
+  --hw-border: #374151;      
+  --hw-light: #f3f4f6;       
+  --hw-white: #ffffff;
+  --hw-orange: #ea580c;       
+  --hw-orange-hover: #c2410c;
+  --hw-yellow: #eab308;       
+}
+
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--hw-light);
+  color: var(--hw-gray);
+}
+
+
+.hw-header {
+  background-color: var(--hw-dark);
+  color: var(--hw-white);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.hw-brand {
+  padding: 1.5rem 2rem;
+  border-bottom: 4px solid var(--hw-orange); 
+}
+
+.hw-brand h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-transform: uppercase; 
+  letter-spacing: 1px;
+}
+
+
+.hw-navbar {
+  background-color: var(--hw-gray);
+  padding: 0 1rem;
+}
+
+.hw-nav-list {
+  display: flex;
+  flex-wrap: wrap; 
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hw-nav-link {
+  display: block;
+  padding: 1rem 1.25rem;
+  color: #d1d5db; 
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-left: 1px solid var(--hw-border);
+  transition: all 0.2s ease;
+}
+
+.hw-nav-list li:first-child .hw-nav-link {
+  border-left: none; 
+}
+
+/* Efecto al pasar el mouse */
+.hw-nav-link:hover {
+  background-color: var(--hw-border);
+  color: var(--hw-white);
+}
+
+
+
+
+.hw-nav-link.primary-link {
+  background-color: var(--hw-orange);
+  color: var(--hw-white);
+  font-weight: 700;
+}
+
+.hw-nav-link.primary-link:hover {
+  background-color: var(--hw-orange-hover);
+}
+
+
+.hw-nav-link.warning-link {
+  color: var(--hw-yellow);
+  font-weight: 600;
+}
+
+.hw-nav-link.warning-link:hover {
+  background-color: rgba(234, 179, 8, 0.1); 
+  color: var(--hw-yellow);
+}
+
+
+.hw-main-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}

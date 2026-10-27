@@ -1,0 +1,145 @@
+:root {
+  --hw-dark: #111827;
+  --hw-gray: #1f2937;
+  --hw-light: #f3f4f6;
+  --hw-white: #ffffff;
+  --hw-orange: #ea580c;
+  --hw-orange-hover: #c2410c;
+  --radius: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--hw-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.hw-form-container {
+  background-color: var(--hw-white);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  border-top: 5px solid var(--hw-orange);
+}
+
+.hw-form-title {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--hw-dark);
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hw-input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.hw-input-group input {
+  width: 100%;
+  padding: 1.25rem 1rem 0.5rem 1rem;
+  font-size: 1rem;
+  color: var(--hw-dark);
+  background-color: var(--hw-light);
+  border: 2px solid #e5e7eb;
+  border-radius: var(--radius);
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.hw-input-group input:focus {
+  border-color: var(--hw-orange);
+  background-color: var(--hw-white);
+}
+
+.hw-input-group label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.hw-input-group input:focus + label,
+.hw-input-group input:valid + label {
+  top: 0.5rem;
+  transform: translateY(0);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--hw-orange);
+}
+
+.hw-select-group {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.hw-select-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--hw-gray);
+  margin-bottom: 0.5rem;
+}
+
+.hw-select-group select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  color: var(--hw-dark);
+  background-color: var(--hw-light);
+  border: 2px solid #e5e7eb;
+  border-radius: var(--radius);
+  outline: none;
+  cursor: pointer;
+}
+
+.hw-select-group select:focus {
+  border-color: var(--hw-orange);
+  background-color: var(--hw-white);
+}
+
+.hw-submit-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--hw-white);
+  background-color: var(--hw-orange);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.hw-submit-btn:hover {
+  background-color: var(--hw-orange-hover);
+}
+
+.hw-back-link {
+  display: block;
+  text-align: center;
+  color: var(--hw-gray);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.hw-back-link:hover {
+  color: var(--hw-orange);
+  text-decoration: underline;
+}

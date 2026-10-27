@@ -1,28 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/agregar_producto.css') }}">
 </head>
 <body>
-    <h1>Agregar Producto</h1>
-    <form action="" method="post">
-        <label for="">Nombre del producto</label>
-        <input type="text" name="nombre">
-        <label for="">Precio del producto</label>
-        <input type="text" name="precio">
-        <label for="">Stock del producto</label>
-        <input type="text" name="stock">
-
-    <select name="id_categoria">
-        {% for cat in categorias %}
-        <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
-        {% endfor %}
-    </select>
-     <button type="submit"> Agregar</button>
-    </form>
-
-    <a href="{{url_for('home')}}">Volver al Inicio</a>    
+    <div class="hw-form-container">
+        <h1 class="hw-form-title">Agregar Producto</h1>
+        
+        <form class="hw-form" action="" method="post">
+            <div class="hw-input-group">
+                <input type="text" id="nombre" name="nombre" required>
+                <label for="nombre">Nombre del producto</label>
+            </div>
+            
+            <div class="hw-input-group">
+                <input type="text" id="precio" name="precio" required>
+                <label for="precio">Precio del producto</label>
+            </div>
+            
+            <div class="hw-input-group">
+                <input type="text" id="stock" name="stock" required>
+                <label for="stock">Stock del producto</label>
+            </div>
+            
+            <div class="hw-select-group">
+                <label for="id_categoria">Categoría</label>
+                <select name="id_categoria" id="id_categoria" required>
+                    <option value="" disabled selected>Seleccione una categoría</option>
+                    {% for cat in categorias %}
+                    <option value="{{cat.id_categoria}}">{{cat.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="hw-submit-btn">Agregar</button>
+        </form>
+        
+        <a href="{{url_for('home')}}" class="hw-back-link">Volver al Inicio</a>
+    </div>
 </body>
 </html>
