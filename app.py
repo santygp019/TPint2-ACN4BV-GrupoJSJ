@@ -1,13 +1,15 @@
 ﻿from db import crearTablas, Session, Producto
 from flask import Flask, render_template
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
-from clientes import agregarCliente, editarCliente, darBajaCliente
+from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
 from compras import cargar_formulario_compra, procesar_nueva_compra
 from proveedores import agregarProveedor
 from venta import ventaProducto
 from pedidos import pedidos_bp
 
-app = Flask(__name__)
+
+app = Flask(__name__)  
+app.secret_key = 'admin123'
 
 app.register_blueprint(pedidos_bp)
 
@@ -62,7 +64,15 @@ def bajaCliente(id_cliente):
 
     return darBajaCliente(id_cliente)
 
+@app.route("/ingresar", methods=["GET", "POST"])
+def ingresar():
 
+    return ingresarCliente()
+
+@app.route("/mi_perfil", methods=["GET", "POST"])
+def miPerfil():
+
+    return verMiPerfil()
 
 @app.route("/compras/nueva", methods=["GET"])
 def ver_compras():
