@@ -88,6 +88,32 @@ class DetalleCompra(Base):
     compra = relationship("Compra", back_populates="detalles")
     producto = relationship("Producto")
     
+    
+    
+class Pedido(Base):
+    __tablename__ = "pedido"
+
+    id_pedido = Column(Integer, primary_key=True, autoincrement=True)
+    fecha = Column(DateTime, default=func.now())
+    fk_id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"), nullable=False)
+    estado = Column(String, default="Pendiente de retiro")
+    
+    cliente = relationship("Cliente")
+    detalles = relationship("DetallePedido", back_populates="pedido")
+
+class DetallePedido(Base):
+    __tablename__ = "detalle_pedido"
+
+    id_detalle = Column(Integer, primary_key=True, autoincrement=True)
+    fk_id_pedido = Column(Integer, ForeignKey("pedido.id_pedido"), nullable=False)
+    fk_id_producto = Column(Integer, ForeignKey("producto.id_producto"), nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    precio_unitario = Column(Float, nullable=False)
+
+    pedido = relationship("Pedido", back_populates="detalles")
+    producto = relationship("Producto")
+    
+    
 def crearTablas():
     Base.metadata.create_all(motorDB)
 
@@ -101,3 +127,4 @@ def crearTablas():
         db_cursor.add(Categoria(nombre="Electronica"))
         db_cursor.commit()
     db_cursor.close()
+

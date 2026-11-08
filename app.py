@@ -5,8 +5,11 @@ from clientes import agregarCliente, editarCliente, darBajaCliente
 from compras import cargar_formulario_compra, procesar_nueva_compra
 from proveedores import agregarProveedor
 from venta import ventaProducto
+from pedidos import pedidos_bp
 
 app = Flask(__name__)
+
+app.register_blueprint(pedidos_bp)
 
 crearTablas()
 
