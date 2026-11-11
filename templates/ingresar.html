@@ -1,26 +1,31 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Ingresar</title>
-</head>
-<body>
-    <h1>Ingresar como Cliente</h1>
+{% extends "base.html" %}
 
-    {% if error %}
-    <p style="color: red;">{{error}}</p>
-    {% endif %}
+{% block title %}Ingreso - JSJ{% endblock %}
 
-    <form action="" method="post">
-        <label>Cliente</label>
-        <select name="id_cliente">
-            {% for cli in clientes %}
-            <option value="{{cli.id_cliente}}">{{cli.nombre}}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Ingresar</button>
-    </form>
+{% block content %}
+<div class="ventas-container" style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+    
+    <div style="background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; border-top: 4px solid var(--hw-orange);">
+        <h2 style="margin-top: 0; color: var(--hw-dark); text-align: center;">Ingresar al Sistema</h2>
+        
+        {% if error %}
+        <p style="color: red; font-weight: bold; text-align: center;">{{error}}</p>
+        {% endif %}
 
-    <a href="{{url_for('home')}}">Volver al Inicio</a>
-</body>
-</html>
+        <form action="" method="post" style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 8px; color: var(--hw-gray);">Seleccione su cliente:</label>
+                <select name="id_cliente" class="ventas-input" style="width: 100%; padding: 10px;" required>
+                    <option value="" disabled selected>-- Elija una opción --</option>
+                    {% for cli in clientes %}
+                    <option value="{{cli.id_cliente}}">{{cli.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="ventas-btn" style="padding: 12px; font-size: 1.1em;">Ingresar</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

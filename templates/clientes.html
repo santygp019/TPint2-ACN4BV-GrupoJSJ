@@ -1,40 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes</title>
-</head>
-<body>
-    <h1>Clientes</h1>
+{% extends "base.html" %}
 
-    <h2>Agregar Cliente</h2>
-    {% if error %}
-    <p style="color: red;">{{error}}</p>
-    {% endif %}
-    <form action="" method="post">
-        <label for="">Nombre</label>
-        <input type="text" name="nombre">
-        <label for="">Email</label>
-        <input type="text" name="email">
-        <label for="">Teléfono</label>
-        <input type="text" name="telefono">
-        <button type="submit"> Agregar</button>
-    </form>
+{% block title %}Gestión de Clientes - JSJ{% endblock %}
 
-    <h2>Lista de Clientes</h2>
-    <ul>
-        {% for cli in clientes %}
-        <li>
-            {{cli.nombre}} - {{cli.email}} - {{cli.telefono}}
-            <a href="{{url_for('modificarCliente', id_cliente=cli.id_cliente)}}">Editar</a>
-            <form action="{{url_for('bajaCliente', id_cliente=cli.id_cliente)}}" method="post" style="display: inline;" onsubmit="return confirm('¿Dar de baja a este cliente?')">
-                <button type="submit">Dar de baja</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark);">Gestión de Clientes</h2>
 
-    <a href="{{url_for('home')}}">Volver al Inicio</a>
-</body>
-</html>
+    <!-- Formulario para agregar cliente -->
+    <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <h3>Agregar Nuevo Cliente</h3>
+        
+        {% if error %}
+        <p style="color: red; font-weight: bold;">{{error}}</p>
+        {% endif %}
+        
+        <form action="" method="post" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="text" name="nombre" class="ventas-input" placeholder="Nombre" required>
+            <input type="email" name="email" class="ventas-input" placeholder="Email">
+            <input type="text" name="telefono" class="ventas-input" placeholder="Teléfono">
+            <button type="submit" class="ventas-btn">Agregar Cliente</button>
+        </form>
+    </div>
+
+    <!-- Tabla de clientes -->
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cli in clientes %}
+            <tr>
+                <td style="font-weight: bold;">{{cli.nombre}}</td>
+                <td>{{cli.email}}</td>
+                <td>{{cli.telefono}}</td>
+                <td>
+                    <a href="{{url_for('modificarCliente', id_cliente=cli.id_cliente)}}" class="ventas-link" style="margin-right: 15px;">Editar</a>
+                    
+                    <form action="{{url_for('bajaCliente', id_cliente=cli.id_cliente)}}" method="post" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas dar de baja a este cliente?')">
+                        <button type="submit" style="background: none; border: none; color: red; font-weight: bold; cursor: pointer; text-decoration: underline;">Dar de baja</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: gray; font-style: italic; padding: 20px;">
+                    No hay clientes registrados o activos en el sistema.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

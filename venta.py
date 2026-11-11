@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from db import Session, Producto, Cliente, Venta, DetalleVenta
-from sqlalchemy import or_, cast, String  # Importamos herramientas para la búsqueda parcial
+from sqlalchemy import or_, cast, String, func, desc
+from datetime import datetime, timedelta
 
 def ventaProducto():
     db_cursor = Session()
@@ -60,7 +61,7 @@ def ventaProducto():
 def procesarCompraCatalogo():
     db_cursor = Session()
     try:
-        # --- LÓGICA DE COMPRA (POST) ---
+        #LÓGICA DE COMPRA (POST)
         if request.method == "POST":
             id_producto = request.form.get("id_producto")
             cantidad_comprada = int(request.form.get("cantidad"))
@@ -85,7 +86,7 @@ def procesarCompraCatalogo():
                 
                 return redirect(url_for("catalogoCliente"))
                 
-        # --- LÓGICA DEL BUSCADOR Y CATÁLOGO (GET) ---
+        #LÓGICA DEL BUSCADOR Y CATÁLOGO (GET)
         texto_buscado = request.args.get("busqueda")
         query = db_cursor.query(Producto).filter(Producto.activo == True, Producto.stock > 0)
         
@@ -99,5 +100,37 @@ def procesarCompraCatalogo():
             
         productos = query.all()
         return render_template("catalogo.html", productos=productos)
+    finally:
+        db_cursor.close()
+
+
+def reporteVentas():
+    db_cursor = Session()
+    try:
+        periodo = request.args.get("periodo", "todos")
+        fecha_limite = None
+        ahora = datetime.now()
+
+        if periodo == "dia":
+            fecha_limite = ahora - timedelta(days=1)
+        elif periodo == "semana":
+            fecha_limite = ahora - timedelta(weeks=1)
+        elif periodo == "mes":
+            fecha_limite = ahora - timedelta(days=30)
+
+        query = db_cursor.query(
+            Producto.nombre,
+            func.sum(DetalleVenta.cantidad).label('total_vendido'),
+            func.sum(DetalleVenta.cantidad * DetalleVenta.precio_venta).label('ingreso_total')
+        ).join(DetalleVenta, Producto.id_producto == DetalleVenta.fk_id_producto)\
+         .join(Venta, Venta.id_venta == DetalleVenta.fk_id_venta)
+
+        if fecha_limite:
+            query = query.filter(Venta.fecha >= fecha_limite)
+
+        resultados = query.group_by(Producto.id_producto)\
+                          .order_by(desc('total_vendido')).all()
+
+        return render_template("reporte_ventas.html", resultados=resultados, periodo_actual=periodo)
     finally:
         db_cursor.close()

@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Producto</title>
-</head>
-<body>
-    <h1>Editar Producto</h1>
+{% extends "base.html" %}
 
-    {% if error %}
-    <p style="color: red;">{{error}}</p>
-    {% endif %}
-    <form action="" method="post">
-        <label for="">Nombre</label>
-        <input type="text" name="nombre" value="{{producto.nombre}}">
-        <label for="">precio</label>
-        <input type="text" name="precio" value="{{producto.precio or ''}}">
-        <label for="">stock</label>
-        <input type="text" name="stock" value="{{producto.stock or ''}}">
-        <button type="submit"> Guardar</button>
-    </form>
+{% block title %}Editar Producto - JSJ{% endblock %}
 
-    <a href="{{url_for('cargarProducto')}}">Volver a productos</a>
-</body>
-</html>
+{% block content %}
+<div class="ventas-container" style="display: flex; justify-content: center; margin-top: 20px;">
+    
+    <div style="background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 500px; border-top: 4px solid var(--hw-orange);">
+        <h2 style="margin-top: 0; color: var(--hw-dark);">Editar Producto</h2>
+        
+        {% if error %}
+        <p style="color: red; font-weight: bold; background-color: #fee2e2; padding: 10px; border-radius: 4px;">{{error}}</p>
+        {% endif %}
+
+        <form action="" method="post" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nombre del Producto:</label>
+                <input type="text" name="nombre" class="ventas-input" value="{{producto.nombre}}" style="width: 100%; box-sizing: border-box;" required>
+            </div>
+            
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Precio ($):</label>
+                <input type="number" step="0.01" name="precio" class="ventas-input" value="{{producto.precio or ''}}" style="width: 100%; box-sizing: border-box;" required>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Stock Actual:</label>
+                <input type="number" name="stock" class="ventas-input" value="{{producto.stock or ''}}" style="width: 100%; box-sizing: border-box;" required>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="submit" class="ventas-btn" style="flex-grow: 1;">Guardar Cambios</button>
+                <a href="{{url_for('cargarProducto')}}" class="ventas-btn" style="background-color: gray; text-align: center; text-decoration: none;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,64 +1,52 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Ferretería JSJ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
-</head>
-<body> 
-    <header class="hw-header hw-brand">
-        <h1>Ferretería JSJ - Catálogo</h1>
-    </header>
+{% extends "base.html" %}
 
-    <div class="ventas-container">
-        
-        <!-- Formulario de búsqueda para el cliente -->
-        <form method="GET" action="{{ url_for('catalogoCliente') }}" style="margin-bottom: 20px;">
-            <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar por nombre..." value="{{ request.args.get('busqueda', '') }}">
-            <button class="ventas-btn" type="submit">Buscar</button>
-            <a class="ventas-link" href="{{ url_for('catalogoCliente') }}" style="margin-left: 10px;">Limpiar</a>
-        </form>
+{% block title %}Catálogo - JSJ{% endblock %}
 
-        {% if productos %}
-        <table class="ventas-table">
-            <thead>
-                <tr>
-                    <th>Nombre del Producto</th>
-                    <th>Precio</th>
-                    <th>Estado y Compra</th>
-                </tr>
-            </thead>
-            <tbody>
-             {% for pro in productos %}
-             <tr>
-                <td>{{ pro.nombre }}</td>
-                <td>${{ pro.precio }}</td>
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Catálogo Público de Productos</h2>
+
+    <!-- Buscador alineado -->
+    <form method="GET" action="{{ url_for('catalogoCliente') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar por nombre..." value="{{ request.args.get('busqueda', '') }}" style="flex-grow: 1; max-width: 400px;">
+        <button class="ventas-btn" type="submit">Buscar</button>
+        <a class="ventas-btn" href="{{ url_for('catalogoCliente') }}" style="background-color: gray; text-decoration: none;">Limpiar</a>
+    </form>
+
+    {% if productos %}
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Nombre del Producto</th>
+                <th>Precio</th>
+                <th>Disponibilidad y Compra</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for pro in productos %}
+         <tr>
+            <td style="font-weight: bold;">{{ pro.nombre }}</td>
+            <td style="font-weight: bold; color: var(--hw-orange);">${{ pro.precio }}</td>
+            
+            <td>
+                <span style="color: #15803d; font-weight: bold; margin-bottom: 8px; display: block;">Disponible ({{ pro.stock }} en stock)</span>
                 
-            <!-- Columna de Estado y Compra -->
-                <td>
-                    <span class="estado-disponible">Disponible</span>
+                <form action="{{ url_for('catalogoCliente') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
+                    <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
                     
-                    <form action="{{ url_for('catalogoCliente') }}" method="POST" class="form-accion">
-                        <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                        
-                        <input class="ventas-input input-corto" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required>
-                        
-                        <button class="ventas-btn btn-espaciado" type="submit" onclick="alert('¡Has comprado ' + this.form.cantidad.value + ' unidades de {{ pro.nombre }} con éxito!');">Comprar</button>
-                    </form>
-                </td>
-             </tr>
-             {% endfor %}       
-            </tbody>
-        </table>
-        {% else %}
-        <!-- Mensaje si no hay productos disponibles o si la búsqueda no encuentra nada -->
-        <p style="color: red; font-weight: bold;">No hay productos disponibles que coincidan con tu búsqueda.</p>
-        {% endif %}
-        
-        <br>
-        <a class="ventas-link" href="{{ url_for('home') }}">Volver al Inicio</a>
+                    <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
+                    
+                    <button class="ventas-btn" type="submit" onclick="alert('¡Has agregado ' + this.form.cantidad.value + ' unidades de {{ pro.nombre }} a tu pedido!');" style="background-color: #15803d;">Hacer Pedido</button>
+                </form>
+            </td>
+         </tr>
+         {% endfor %}       
+        </tbody>
+    </table>
+    {% else %}
+    <div style="background-color: #fee2e2; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #ef4444; margin-top: 20px;">
+        <p style="color: #991b1b; font-weight: bold; margin: 0;">No hay productos disponibles que coincidan con tu búsqueda en este momento.</p>
     </div>
-</body>
-</html>
+    {% endif %}
+</div>
+{% endblock %}

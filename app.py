@@ -2,9 +2,9 @@
 from flask import Flask, render_template, request 
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
-from compras import cargar_formulario_compra, procesar_nueva_compra
+from compras import cargar_formulario_compra, procesar_nueva_compra, historial_compras
 from proveedores import agregarProveedor
-from venta import ventaProducto, procesarCompraCatalogo
+from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
 
 
@@ -85,10 +85,18 @@ def ver_compras():
 def registrar_compras():
     return procesar_nueva_compra()
 
+@app.route("/compras/historial", methods=["GET"])
+def ver_historial_compras():
+    return historial_compras()
+
 
 @app.route("/reportes/stock_critico")
 def verStockCritico():
     return reporte_stock_critico()
+
+@app.route("/reportes/ventas", methods=["GET"])
+def ver_reporte_ventas():
+    return reporteVentas()
     
 @app.route("/proveedores", methods=["GET", "POST"])
 def cargarProveedor():

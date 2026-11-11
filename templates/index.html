@@ -1,46 +1,44 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferretería JSJ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Panel de Control - JSJ{% endblock %}
+
+{% block content %}
+<div class="ventas-container">
+    <h2 style="color: var(--hw-dark); margin-top: 0; border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Panel de Control General</h2>
     
-    <header class="hw-header">
-        <div class="hw-brand">
-            <h1>Ferretería JSJ</h1>
-        </div>
+    <p style="color: var(--hw-gray); margin-bottom: 30px;">Bienvenido al sistema de gestión. Seleccione una operación rápida:</p>
+
+    <!-- Grilla de Tarjetas -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
         
-        <nav class="hw-navbar">
-            <ul class="hw-nav-list">
-                <!-- Gestión de Productos -->
-                <li><a href="{{url_for('cargarProducto')}}" class="hw-nav-link">Nuevo Producto</a></li>
-                <li><a href="{{url_for('verListaProductos')}}" class="hw-nav-link">Lista de Productos</a></li>
-                
-                <!-- Destacamos el stock crítico con una clase especial para que llame la atención -->
-                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link warning-link">Stock Crítico</a></li>
-                
-                <!-- Gestión de Personas -->
-                <li><a href="{{url_for('cargarCliente')}}" class="hw-nav-link">Clientes</a></li>
-                <li><a href="{{url_for('cargarProveedor')}}" class="hw-nav-link">Proveedores</a></li>
-                
-                <!-- Operaciones -->
-                <li><a href="/compras/nueva" class="hw-nav-link">Comprar a Proveedor</a></li>
-                
-                <!-- Vistas separadas para Cliente y Empleado -->
-                <li><a href="{{url_for('catalogoCliente')}}" class="hw-nav-link">Catálogo Público</a></li>
-                <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link primary-link">Punto de Venta</a></li>
-            </ul>
-        </nav>
-    </header>
+        <!-- Tarjeta 1 -->
+        <div style="background-color: white; padding: 25px; border-radius: 8px; border-left: 5px solid #3b82f6; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; color: #1e3a8a;">Punto de Venta</h3>
+            <p style="color: gray; font-size: 0.9em; margin-bottom: 20px;">Registrar nuevas ventas y descontar stock instantáneamente.</p>
+            <a href="{{url_for('seccionVentas')}}" class="ventas-btn" style="background-color: #3b82f6; text-decoration: none; display: inline-block;">Ir a Ventas</a>
+        </div>
 
-    <!-- Acá abajo iría el resto del contenido de tu página (tablas, formularios, etc.) -->
-    <main class="hw-main-content">
-        <h2>Panel de Control</h2>
-        <p>Seleccione una opción del menú superior para comenzar.</p>
-    </main>
+        <!-- Tarjeta 2 -->
+        <div style="background-color: white; padding: 25px; border-radius: 8px; border-left: 5px solid var(--hw-orange); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; color: var(--hw-orange-hover);">Gestión de Stock</h3>
+            <p style="color: gray; font-size: 0.9em; margin-bottom: 20px;">Administrar productos, categorías y revisar inventario.</p>
+            <a href="{{url_for('verListaProductos')}}" class="ventas-btn" style="text-decoration: none; display: inline-block;">Ver Productos</a>
+        </div>
 
-</body>
-</html>
+        <!-- Tarjeta 3 -->
+        <div style="background-color: white; padding: 25px; border-radius: 8px; border-left: 5px solid #ef4444; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; color: #991b1b;">Alertas Críticas</h3>
+            <p style="color: gray; font-size: 0.9em; margin-bottom: 20px;">Consultar los productos que están por agotarse o sin stock.</p>
+            <a href="{{url_for('verStockCritico')}}" class="ventas-btn" style="background-color: #ef4444; text-decoration: none; display: inline-block;">Ver Alertas</a>
+        </div>
+
+        <!-- Tarjeta 4 -->
+        <div style="background-color: white; padding: 25px; border-radius: 8px; border-left: 5px solid #10b981; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; color: #065f46;">Ingresos y Reportes</h3>
+            <p style="color: gray; font-size: 0.9em; margin-bottom: 20px;">Analizar los productos más vendidos y métricas de ganancia.</p>
+            <a href="{{url_for('ver_reporte_ventas')}}" class="ventas-btn" style="background-color: #10b981; text-decoration: none; display: inline-block;">Ver Reporte</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

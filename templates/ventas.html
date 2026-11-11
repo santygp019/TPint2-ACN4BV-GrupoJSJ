@@ -1,77 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo de Productos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
-</head>
-<body> 
-    <header class="hw-header hw-brand">
-        <h1>Catálogo de Productos</h1>
-    </header>
+{% extends "base.html" %}
 
-    <div class="ventas-container">
-        <!-- Buscador -->
-        <form method="GET" action="{{ url_for('seccionVentas') }}" style="margin-bottom: 20px;">
-            <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}">
-            <button class="ventas-btn" type="submit">Buscar</button>
-            <a class="ventas-link" href="{{ url_for('seccionVentas') }}" style="margin-left: 10px;">Limpiar</a>
-        </form>
+{% block title %}Punto de Venta - JSJ{% endblock %}
 
-        {% if productos %}
-        <table class="ventas-table">
-            <thead>
-                <tr>
-                    <th>Nombre del Producto</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-             {% for pro in productos %}
-             <tr>
-                <td>{{ pro.nombre }}</td>
-                <td>${{ pro.precio }}</td>
-<!-- Columna de Stock con Alertas -->
-                <td>
-                    {{ pro.stock }}
-                    
-                    {% if pro.stock == 0 %}
-                        <!-- Etiqueta roja de agotado -->
-                        <span style="color: white; background-color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; padding: 2px 6px; border-radius: 4px;">AGOTADO</span>
-                    {% elif pro.stock <= 5 %}
-                        <!-- Etiqueta de crítico -->
-                        <span style="color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; border: 1px solid red; padding: 2px 4px; border-radius: 4px;">¡CRÍTICO!</span>
-                    {% endif %}
-                </td>
-                
-                <!-- Columna de Acción -->
-                <td>
-                    {% if pro.stock > 0 %}
-                        <!-- Si hay stock, mostramos el formulario de venta -->
-                        <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: inline-block;">
-                            <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                            <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 60px;">
-                            <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades del stock exitosamente');">Vender</button>
-                        </form>
-                    {% else %}
-                        <!-- Si no hay stock, ocultamos el botón y mostramos un texto gris -->
-                        <span style="color: gray; font-style: italic;">Sin stock para vender</span>
-                    {% endif %}
-                </td>
-             </tr>
-             {% endfor %}       
-            </tbody>
-        </table>
-        {% else %}
-        <p style="color: red; font-weight: bold;">No se encontraron productos que coincidan con la búsqueda.</p>
-        {% endif %}
-        
-        <br>
-        <a class="ventas-link" href="{{ url_for('home') }}">Volver al Inicio</a>
-    </div>
-</body>
-</html>
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Punto de Venta</h2>
+    
+    <!-- Buscador alineado -->
+    <form method="GET" action="{{ url_for('seccionVentas') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}" style="flex-grow: 1; max-width: 400px;">
+        <button class="ventas-btn" type="submit">Buscar</button>
+        <a class="ventas-btn" href="{{ url_for('seccionVentas') }}" style="background-color: gray; text-decoration: none;">Limpiar</a>
+    </form>
+
+    {% if productos %}
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for pro in productos %}
+         <tr>
+            <td style="font-weight: bold;">{{ pro.nombre }}</td>
+            <td>${{ pro.precio }}</td>
+            <td>
+                {{ pro.stock }}
+                {% if pro.stock == 0 %}
+                    <span style="color: white; background-color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; padding: 2px 6px; border-radius: 4px;">AGOTADO</span>
+                {% elif pro.stock <= 5 %}
+                    <span style="color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; border: 1px solid red; padding: 2px 4px; border-radius: 4px;">¡CRÍTICO!</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if pro.stock > 0 %}
+                    <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
+                        <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
+                        <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades exitosamente');">Vender</button>
+                    </form>
+                {% else %}
+                    <span style="color: gray; font-style: italic;">Sin stock</span>
+                {% endif %}
+            </td>
+         </tr>
+         {% endfor %}       
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: red; font-weight: bold;">No se encontraron productos.</p>
+    {% endif %}
+</div>
+{% endblock %}

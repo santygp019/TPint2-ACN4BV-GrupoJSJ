@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de Ventas - JSJ{% endblock %}
+
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Reporte de Productos Más Vendidos</h2>
+
+    <!-- Filtro por periodo -->
+    <form method="GET" action="{{ url_for('ver_reporte_ventas') }}" style="margin-bottom: 20px; background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: inline-block;">
+        <label for="periodo" style="font-weight: bold; margin-right: 10px;">Filtrar por periodo:</label>
+        <select name="periodo" id="periodo" class="ventas-input" onchange="this.form.submit()">
+            <option value="todos" {% if periodo_actual == 'todos' %}selected{% endif %}>Histórico Completo</option>
+            <option value="dia" {% if periodo_actual == 'dia' %}selected{% endif %}>Últimas 24 horas</option>
+            <option value="semana" {% if periodo_actual == 'semana' %}selected{% endif %}>Última semana</option>
+            <option value="mes" {% if periodo_actual == 'mes' %}selected{% endif %}>Último mes</option>
+        </select>
+    </form>
+
+    {% if resultados %}
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Nombre del Producto</th>
+                <th>Unidades Vendidas</th>
+                <th>Ingreso Total Generado</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for item in resultados %}
+         <tr>
+            <td style="font-weight: bold;">{{ item.nombre }}</td>
+            <td style="font-weight: bold; color: var(--hw-orange);">{{ item.total_vendido }} un.</td>
+            <td>${{ "{:,.2f}".format(item.ingreso_total) }}</td>
+         </tr>
+         {% endfor %}       
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: gray; font-style: italic;">No hay ventas registradas en el periodo seleccionado.</p>
+    {% endif %}
+</div>
+{% endblock %}

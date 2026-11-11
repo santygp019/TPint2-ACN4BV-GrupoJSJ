@@ -76,3 +76,23 @@ def procesar_nueva_compra():
     finally:
         db_cursor.close()
         
+def historial_compras():
+    db_cursor = Session()
+    try:
+        id_proveedor = request.args.get("id_proveedor")
+        fecha_buscada = request.args.get("fecha")
+
+        query = db_cursor.query(Compra).join(Proveedor)
+
+        if id_proveedor and id_proveedor != "todos":
+            query = query.filter(Compra.fk_id_proveedor == id_proveedor)
+        
+        if fecha_buscada:
+            query = query.filter(Compra.fecha.like(f"{fecha_buscada}%"))
+
+        compras = query.order_by(Compra.fecha.desc()).all()
+        proveedores = db_cursor.query(Proveedor).all()
+
+        return render_template("historial_compras.html", compras=compras, proveedores=proveedores)
+    finally:
+        db_cursor.close()

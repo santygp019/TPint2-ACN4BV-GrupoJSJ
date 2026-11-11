@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Cliente</title>
-</head>
-<body>
-    <h1>Editar Cliente</h1>
+{% extends "base.html" %}
 
-    {% if error %}
-    <p style="color: red;">{{error}}</p>
-    {% endif %}
-    <form action="" method="post">
-        <label for="">Nombre</label>
-        <input type="text" name="nombre" value="{{cliente.nombre}}">
-        <label for="">Email</label>
-        <input type="text" name="email" value="{{cliente.email or ''}}">
-        <label for="">Teléfono</label>
-        <input type="text" name="telefono" value="{{cliente.telefono or ''}}">
-        <button type="submit"> Guardar</button>
-    </form>
+{% block title %}Editar Perfil - JSJ{% endblock %}
 
-    <a href="{{url_for('cargarCliente')}}">Volver a Clientes</a>
-</body>
-</html>
+{% block content %}
+<div class="ventas-container" style="display: flex; justify-content: center; margin-top: 20px;">
+    
+    <div style="background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 500px; border-top: 4px solid var(--hw-orange);">
+        <h2 style="margin-top: 0; color: var(--hw-dark);">Actualizar Datos</h2>
+        
+        {% if error %}
+        <p style="color: red; font-weight: bold; background-color: #fee2e2; padding: 10px; border-radius: 4px;">{{error}}</p>
+        {% endif %}
+
+        <form action="" method="post" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nombre Completo:</label>
+                <input type="text" name="nombre" class="ventas-input" value="{{cliente.nombre}}" style="width: 100%; box-sizing: border-box;" required>
+            </div>
+            
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Email:</label>
+                <input type="email" name="email" class="ventas-input" value="{{cliente.email or ''}}" style="width: 100%; box-sizing: border-box;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Teléfono:</label>
+                <input type="text" name="telefono" class="ventas-input" value="{{cliente.telefono or ''}}" style="width: 100%; box-sizing: border-box;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="submit" class="ventas-btn" style="flex-grow: 1;">Guardar Cambios</button>
+                <a href="{{url_for('cargarCliente')}}" class="ventas-btn" style="background-color: gray; text-align: center; text-decoration: none;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

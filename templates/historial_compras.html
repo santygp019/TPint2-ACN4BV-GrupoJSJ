@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de Compras - JSJ{% endblock %}
+
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Historial de Compras a Proveedores</h2>
+
+    <!-- Filtros en formato tarjeta -->
+    <form method="GET" action="{{ url_for('ver_historial_compras') }}" style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <label for="id_proveedor" style="font-weight: bold;">Proveedor:</label>
+        <select name="id_proveedor" id="id_proveedor" class="ventas-input">
+            <option value="todos">Todos los proveedores</option>
+            {% for prov in proveedores %}
+                <option value="{{ prov.id_proveedor }}" {% if request.args.get('id_proveedor') == prov.id_proveedor|string %}selected{% endif %}>
+                    {{ prov.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="fecha" style="font-weight: bold;">Fecha:</label>
+        <input type="date" name="fecha" id="fecha" class="ventas-input" value="{{ request.args.get('fecha', '') }}">
+
+        <button class="ventas-btn" type="submit">Filtrar</button>
+        <a class="ventas-btn" href="{{ url_for('ver_historial_compras') }}" style="background-color: gray; text-decoration: none;">Limpiar</a>
+    </form>
+
+    {% if compras %}
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>ID Compra</th>
+                <th>Fecha y Hora</th>
+                <th>Proveedor</th>
+                <th>Detalle de Productos</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for compra in compras %}
+         <tr>
+            <td style="font-weight: bold; color: var(--hw-orange);">#{{ compra.id_compra }}</td>
+            <td>{{ compra.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td style="font-weight: bold;">{{ compra.Proveedor.nombre }}</td>
+            <td>
+                <ul style="margin: 0; padding-left: 20px;">
+                    {% for detalle in compra.detalles %}
+                        <li>{{ detalle.cantidad }}x {{ detalle.producto.nombre }} (${{ detalle.precio_compra }} c/u)</li>
+                    {% else %}
+                        <li style="color: gray;">Sin detalle registrado</li>
+                    {% endfor %}
+                </ul>
+            </td>
+         </tr>
+         {% endfor %}       
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: gray; font-style: italic;">No se encontraron compras con los filtros aplicados.</p>
+    {% endif %}
+</div>
+{% endblock %}

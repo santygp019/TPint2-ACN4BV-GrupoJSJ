@@ -38,3 +38,26 @@ def catalogo_cliente():
         return render_template("catalogo_cliente.html", productos=productos_disponibles, clientes=clientes)
     finally:
         db_cursor.close()
+        
+@pedidos_bp.route('/pendientes', methods=['GET'])
+def ver_pendientes():
+    db_cursor = Session()
+    try:
+        # Filtramos solo los pedidos que aún no fueron entregados
+        pedidos = db_cursor.query(Pedido).filter_by(estado="Pendiente de retiro").order_by(Pedido.fecha.asc()).all()
+        return render_template("pedidos_pendientes.html", pedidos=pedidos)
+    finally:
+        db_cursor.close()
+
+@pedidos_bp.route('/confirmar/<int:id_pedido>', methods=['POST'])
+def confirmar_pedido(id_pedido):
+    db_cursor = Session()
+    try:
+        pedido = db_cursor.query(Pedido).filter_by(id_pedido=id_pedido).first()
+        if pedido:
+            # Actualizamos el estado para sacarlo de la lista de pendientes
+            pedido.estado = "Confirmado y Entregado"
+            db_cursor.commit()
+        return redirect(url_for('pedidos.ver_pendientes'))
+    finally:
+        db_cursor.close()

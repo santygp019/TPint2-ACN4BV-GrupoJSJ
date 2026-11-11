@@ -1,26 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Crítico</title>
-</head>
-<body>
-    <h1>Reporte de Stock Crítico</h1>
-    <p>Los siguientes productos tienen 5 unidades o menos en inventario:</p>
+{% extends "base.html" %}
 
-    <ul>
-        {% for pro in productos %}
-            <li style="color: red;">
-                <b>{{ pro.nombre }}</b> - Stock actual: {{ pro.stock }} 
-                (Categoría: {{ pro.categoria.nombre }})
-            </li>
-        {% else %}
-            <li style="color: green;">El inventario está en niveles óptimos. No hay stock crítico.</li>
-        {% endfor %}
-    </ul>
+{% block title %}Stock Crítico - JSJ{% endblock %}
 
-    <br>
-    <a href="{{ url_for('home') }}">Volver al Inicio</a>
-</body>
-</html>
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: #ef4444; border-bottom: 2px solid #ef4444; padding-bottom: 10px;">⚠️ Reporte de Stock Crítico</h2>
+    <p style="color: var(--hw-gray); margin-bottom: 20px;">Los siguientes productos tienen 5 unidades o menos en inventario y requieren reposición inmediata:</p>
+
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Stock Actual</th>
+                <th>Acción Sugerida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pro in productos %}
+            <tr style="background-color: {% if pro.stock == 0 %}#fee2e2{% else %}#fef3c7{% endif %};">
+                <td style="font-weight: bold; color: #991b1b;">{{ pro.nombre }}</td>
+                <td>{{ pro.categoria.nombre }}</td>
+                <td style="font-weight: bold; font-size: 1.1em; color: {% if pro.stock == 0 %}red{% else %}#b45309{% endif %};">
+                    {{ pro.stock }} un.
+                </td>
+                <td>
+                    <a href="/compras/nueva" class="ventas-link" style="color: #065f46;">Comprar a proveedor</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: #15803d; font-weight: bold; padding: 30px;">
+                    ✅ El inventario está en niveles óptimos. No hay stock crítico.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

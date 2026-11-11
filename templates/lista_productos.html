@@ -1,26 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Productos</title>
-</head>
-<body>
-    <h2>Lista de Productos</h2>
-    <select name="id_categoria" >
-        {% for cat in categorias %}
-        <option value="{{cat.id_categoria}}"> {{cat.nombre}}</option>
-        {% endfor %}
-    </select>
-    <ul>
-        {% for pro in productos %}
-        <li>{{pro.nombre}} - ${{pro.precio}} - {{pro.categoria.nombre}}</li>
-        <a href="{{url_for('modificarProducto', id_producto=pro.id_producto)}}"> Editar Producto</a>
-        <a href="{{url_for('borrarProducto', id_producto=pro.id_producto)}}" onclick="return confirm('Estas seguro que desea eliminar este producto')"> Eliminar Producto</a>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
 
+{% block title %}Lista de Productos - JSJ{% endblock %}
 
-    <a href="{{url_for('home')}}">Volver al Inicio</a>
-</body>
-</html>
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark);">Lista de Productos</h2>
+    
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pro in productos %}
+            <tr>
+                <td style="font-weight: bold;">{{pro.nombre}}</td>
+                <td>${{pro.precio}}</td>
+                <td>{{pro.categoria.nombre}}</td>
+                <td>
+                    <a href="{{url_for('modificarProducto', id_producto=pro.id_producto)}}" class="ventas-link" style="margin-right: 15px;">Editar</a>
+                    <a href="{{url_for('borrarProducto', id_producto=pro.id_producto)}}" onclick="return confirm('¿Estás seguro que desea eliminar este producto?')" style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: gray; font-style: italic; padding: 20px;">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

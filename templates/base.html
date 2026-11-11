@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ferretería JSJ{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="hw-header">
+        <div class="hw-brand" style="display: flex; justify-content: center; align-items: center;">
+            <h1 style="margin: 0;"><a href="{{ url_for('home') }}" style="color: var(--hw-white); text-decoration: none;">Ferretería JSJ</a></h1>
+        </div>
+        
+        <nav class="hw-navbar">
+            <ul class="hw-nav-list" style="justify-content: center; gap: 5px;">
+                <li><a href="{{url_for('cargarProducto')}}" class="hw-nav-link">Nuevo Producto</a></li>
+                <li><a href="{{url_for('verListaProductos')}}" class="hw-nav-link">Productos</a></li>
+                <li><a href="{{url_for('cargarCliente')}}" class="hw-nav-link">Clientes</a></li>
+                <li><a href="{{url_for('cargarProveedor')}}" class="hw-nav-link">Proveedores</a></li>
+                <li><a href="/compras/nueva" class="hw-nav-link">Comprar Stock</a></li>
+                <li><a href="{{url_for('ver_historial_compras')}}" class="hw-nav-link">Historial</a></li>
+                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link warning-link">Stock Crítico</a></li>
+                <li><a href="{{url_for('ver_reporte_ventas')}}" class="hw-nav-link warning-link">Ventas</a></li>
+                <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link primary-link">Pedidos</a></li>
+                <li><a href="{{url_for('catalogoCliente')}}" class="hw-nav-link">Catálogo Público</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="hw-main-content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
