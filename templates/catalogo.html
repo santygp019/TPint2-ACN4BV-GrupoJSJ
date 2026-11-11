@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Ferretería JSJ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
+</head>
+<body> 
+    <header class="hw-header hw-brand">
+        <h1>Ferretería JSJ - Catálogo</h1>
+    </header>
+
+    <div class="ventas-container">
+        
+        <!-- Formulario de búsqueda para el cliente -->
+        <form method="GET" action="{{ url_for('catalogoCliente') }}" style="margin-bottom: 20px;">
+            <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar por nombre..." value="{{ request.args.get('busqueda', '') }}">
+            <button class="ventas-btn" type="submit">Buscar</button>
+            <a class="ventas-link" href="{{ url_for('catalogoCliente') }}" style="margin-left: 10px;">Limpiar</a>
+        </form>
+
+        {% if productos %}
+        <table class="ventas-table">
+            <thead>
+                <tr>
+                    <th>Nombre del Producto</th>
+                    <th>Precio</th>
+                    <th>Estado y Compra</th>
+                </tr>
+            </thead>
+            <tbody>
+             {% for pro in productos %}
+             <tr>
+                <td>{{ pro.nombre }}</td>
+                <td>${{ pro.precio }}</td>
+                
+            <!-- Columna de Estado y Compra -->
+                <td>
+                    <span class="estado-disponible">Disponible</span>
+                    
+                    <form action="{{ url_for('catalogoCliente') }}" method="POST" class="form-accion">
+                        <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
+                        
+                        <input class="ventas-input input-corto" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required>
+                        
+                        <button class="ventas-btn btn-espaciado" type="submit" onclick="alert('¡Has comprado ' + this.form.cantidad.value + ' unidades de {{ pro.nombre }} con éxito!');">Comprar</button>
+                    </form>
+                </td>
+             </tr>
+             {% endfor %}       
+            </tbody>
+        </table>
+        {% else %}
+        <!-- Mensaje si no hay productos disponibles o si la búsqueda no encuentra nada -->
+        <p style="color: red; font-weight: bold;">No hay productos disponibles que coincidan con tu búsqueda.</p>
+        {% endif %}
+        
+        <br>
+        <a class="ventas-link" href="{{ url_for('home') }}">Volver al Inicio</a>
+    </div>
+</body>
+</html>

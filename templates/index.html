@@ -29,8 +29,9 @@
                 <!-- Operaciones -->
                 <li><a href="/compras/nueva" class="hw-nav-link">Comprar a Proveedor</a></li>
                 
-                <!-- Resaltamos las ventas como la acción principal -->
-                <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link primary-link">Catálogo y Ventas</a></li>
+                <!-- Vistas separadas para Cliente y Empleado -->
+                <li><a href="{{url_for('catalogoCliente')}}" class="hw-nav-link">Catálogo Público</a></li>
+                <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link primary-link">Punto de Venta</a></li>
             </ul>
         </nav>
     </header>

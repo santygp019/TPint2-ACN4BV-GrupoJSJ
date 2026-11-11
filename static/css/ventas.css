@@ -55,3 +55,24 @@
 .ventas-link:hover {
     text-decoration: underline;
 }
+
+
+/* --- ESTILOS ESPECÍFICOS DEL CATÁLOGO --- */
+.estado-disponible {
+    color: #15803d; /* Verde oscuro para lectura clara */
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-accion {
+    display: inline-block;
+}
+
+.input-corto {
+    width: 60px;
+}
+
+.btn-espaciado {
+    margin-left: 5px;
+}

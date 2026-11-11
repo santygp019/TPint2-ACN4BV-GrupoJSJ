@@ -35,14 +35,32 @@
              <tr>
                 <td>{{ pro.nombre }}</td>
                 <td>${{ pro.precio }}</td>
-                <td>{{ pro.stock }}</td>
+<!-- Columna de Stock con Alertas -->
                 <td>
-                    <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: inline-block;">
-                        <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                        <!-- Input de cantidad con estilo -->
-                        <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 60px;">
-                        <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades del stock exitosamente');">Vender</button>
-                    </form>
+                    {{ pro.stock }}
+                    
+                    {% if pro.stock == 0 %}
+                        <!-- Etiqueta roja de agotado -->
+                        <span style="color: white; background-color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; padding: 2px 6px; border-radius: 4px;">AGOTADO</span>
+                    {% elif pro.stock <= 5 %}
+                        <!-- Etiqueta de crítico -->
+                        <span style="color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; border: 1px solid red; padding: 2px 4px; border-radius: 4px;">¡CRÍTICO!</span>
+                    {% endif %}
+                </td>
+                
+                <!-- Columna de Acción -->
+                <td>
+                    {% if pro.stock > 0 %}
+                        <!-- Si hay stock, mostramos el formulario de venta -->
+                        <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
+                            <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 60px;">
+                            <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades del stock exitosamente');">Vender</button>
+                        </form>
+                    {% else %}
+                        <!-- Si no hay stock, ocultamos el botón y mostramos un texto gris -->
+                        <span style="color: gray; font-style: italic;">Sin stock para vender</span>
+                    {% endif %}
                 </td>
              </tr>
              {% endfor %}       

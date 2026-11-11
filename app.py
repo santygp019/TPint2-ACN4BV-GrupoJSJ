@@ -1,10 +1,10 @@
 ﻿from db import crearTablas, Session, Producto
-from flask import Flask, render_template
+from flask import Flask, render_template, request 
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
 from compras import cargar_formulario_compra, procesar_nueva_compra
 from proveedores import agregarProveedor
-from venta import ventaProducto
+from venta import ventaProducto, procesarCompraCatalogo
 from pedidos import pedidos_bp
 
 
@@ -46,6 +46,9 @@ def seccionVentas():
 
     return ventaProducto()
 
+@app.route("/catalogo", methods=["GET", "POST"])
+def catalogoCliente():
+    return procesarCompraCatalogo()
 
 @app.route("/clientes", methods=["GET", "POST"])
 def cargarCliente():
