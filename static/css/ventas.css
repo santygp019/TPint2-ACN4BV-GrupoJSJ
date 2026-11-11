@@ -1,0 +1,57 @@
+
+.ventas-container {
+    padding: 2rem;
+}
+
+.ventas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background-color: var(--hw-white, #ffffff);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ventas-table th, .ventas-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+.ventas-table th {
+    background-color: var(--hw-dark, #111827);
+    color: var(--hw-white, #ffffff);
+    font-weight: 600;
+}
+
+
+.ventas-btn {
+    background-color: var(--hw-orange, #ea580c);
+    color: var(--hw-white, #ffffff);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.ventas-btn:hover {
+    background-color: var(--hw-orange-hover, #c2410c);
+}
+
+
+.ventas-input {
+    padding: 8px 12px;
+    border: 1px solid var(--hw-border, #374151);
+    border-radius: 4px;
+    outline: none;
+}
+.ventas-input:focus {
+    border-color: var(--hw-orange, #ea580c);
+}
+
+.ventas-link {
+    color: var(--hw-orange, #ea580c);
+    text-decoration: none;
+    font-weight: bold;
+}
+.ventas-link:hover {
+    text-decoration: underline;
+}

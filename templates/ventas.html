@@ -4,38 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo de Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}">
 </head>
 <body> 
-    <h1>Catalogo de Productos</h1>
-    <table>
-        <thead>
-            <tr>
-            <th>Nombre del Producto</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Accion</th>
-            </tr>
-        </thead>
-        <tbody>
-         {% for pro in productos %}
-         <tr>
-            <th>{{pro.nombre}}</th>
-            <th>{{pro.precio}}</th>
-            <th>{{pro.stock}}</th>
-            <th>
-            <form action="{{url_for('seccionVentas')}}" method="POST" style="display: inline-block;">
-                <!-- El input del hidden esta para que le avise al backend el id del producto para poder descontarlo-->>
-                <input type="hidden" name="id_producto" value="{{pro.id_producto}}">
-                <input type="number" name="cantidad" min="1" max="{{pro.stock}}" value="1" required>
-                <button type="submit" onclick="alert('Se descontador ' + this.form.cantidad.value + ' unidades del stock exitosamente');"> Vender</button>
-            </form></th>
-         </tr>
-         {% endfor %}       
-        </tbody>
-    </table>
-    <br>
-  
-    <a href="{{url_for('home')}}">Volver al Inicio</a>
-    
+    <header class="hw-header hw-brand">
+        <h1>Catálogo de Productos</h1>
+    </header>
+
+    <div class="ventas-container">
+        <!-- Buscador -->
+        <form method="GET" action="{{ url_for('seccionVentas') }}" style="margin-bottom: 20px;">
+            <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}">
+            <button class="ventas-btn" type="submit">Buscar</button>
+            <a class="ventas-link" href="{{ url_for('seccionVentas') }}" style="margin-left: 10px;">Limpiar</a>
+        </form>
+
+        {% if productos %}
+        <table class="ventas-table">
+            <thead>
+                <tr>
+                    <th>Nombre del Producto</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+             {% for pro in productos %}
+             <tr>
+                <td>{{ pro.nombre }}</td>
+                <td>${{ pro.precio }}</td>
+                <td>{{ pro.stock }}</td>
+                <td>
+                    <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
+                        <!-- Input de cantidad con estilo -->
+                        <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 60px;">
+                        <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades del stock exitosamente');">Vender</button>
+                    </form>
+                </td>
+             </tr>
+             {% endfor %}       
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color: red; font-weight: bold;">No se encontraron productos que coincidan con la búsqueda.</p>
+        {% endif %}
+        
+        <br>
+        <a class="ventas-link" href="{{ url_for('home') }}">Volver al Inicio</a>
+    </div>
 </body>
 </html>

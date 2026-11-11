@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from db import Session, Producto, Cliente, Venta, DetalleVenta
+from sqlalchemy import or_, cast, String  # Importamos herramientas para la búsqueda parcial
 
 def ventaProducto():
     db_cursor = Session()
@@ -16,7 +17,7 @@ def ventaProducto():
 
                 nueva_venta= Venta()
                 db_cursor.add(nueva_venta)
-                db_cursor.flush()### esto perimite obtener el id de la venta antes del commit.
+                db_cursor.flush()### esto permite obtener el id de la venta antes del commit.
 
                 detalle = DetalleVenta(
                     fk_id_venta = nueva_venta.id_venta,
@@ -29,9 +30,24 @@ def ventaProducto():
 
                 return redirect(url_for("seccionVentas"))
         
-        productoDisponible = (
-            db_cursor.query(Producto).filter(Producto.activo == True, Producto.stock > 0).all()
-        )
+       
+        # Atrapamos el texto que viene del formulario HTML
+        texto_buscado = request.args.get("busqueda")
+        
+        # Armamos la consulta base (solo activos y con stock)
+        query = db_cursor.query(Producto).filter(Producto.activo == True, Producto.stock > 0)
+        
+        # Si el usuario escribió algo, le agregamos el filtro de coincidencias parciales
+        if texto_buscado:
+            query = query.filter(
+                or_(
+                    Producto.nombre.ilike(f"%{texto_buscado}%"),
+                    cast(Producto.id_producto, String).ilike(f"%{texto_buscado}%")
+                )
+            )
+            
+        # Ejecutamos la consulta final
+        productoDisponible = query.all()
 
         clientes = db_cursor.query(Cliente).filter_by(activo=True).all()
 
