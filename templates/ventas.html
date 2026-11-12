@@ -5,7 +5,11 @@
 {% block content %}
 <div class="ventas-container">
     <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Punto de Venta</h2>
-    
+        {% with mensajes = get_flashed_messages() %}
+      {% for m in mensajes %}
+        <p style="color: red; font-weight: bold;">{{ m }}</p>
+      {% endfor %}
+    {% endwith %}
     <!-- Buscador alineado -->
     <form method="GET" action="{{ url_for('seccionVentas') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
         <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}" style="flex-grow: 1; max-width: 400px;">
@@ -41,7 +45,7 @@
                     <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
                         <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
                         <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
-                        <button class="ventas-btn" type="submit" onclick="alert('Se descontaron ' + this.form.cantidad.value + ' unidades exitosamente');">Vender</button>
+                        <button class="ventas-btn" type="submit">Vender</button>
                     </form>
                 {% else %}
                     <span style="color: gray; font-style: italic;">Sin stock</span>
