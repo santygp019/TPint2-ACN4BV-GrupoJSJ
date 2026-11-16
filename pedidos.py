@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from db import Session, Producto, Cliente, Pedido, DetallePedido
+from db import Session, Producto, Cliente, Pedido, DetallePedido, Venta, DetalleVenta
 
 pedidos_bp = Blueprint('pedidos', __name__, url_prefix='/pedidos')
 
@@ -11,16 +11,16 @@ def catalogo_cliente():
             id_cliente = request.form.get("id_cliente")
             id_producto = request.form.get("id_producto")
             cantidad_pedida = int(request.form.get("cantidad"))
-            
+
             producto = db_cursor.query(Producto).filter_by(id_producto=id_producto).first()
-            
+
             if producto and producto.stock >= cantidad_pedida:
                 producto.stock -= cantidad_pedida
-                
+
                 nuevo_pedido = Pedido(fk_id_cliente=id_cliente)
                 db_cursor.add(nuevo_pedido)
-                db_cursor.flush() 
-                
+                db_cursor.flush()
+
                 detalle = DetallePedido(
                     fk_id_pedido=nuevo_pedido.id_pedido,
                     fk_id_producto=producto.id_producto,
@@ -29,16 +29,17 @@ def catalogo_cliente():
                 )
                 db_cursor.add(detalle)
                 db_cursor.commit()
-                
+
                 return redirect(url_for("pedidos.catalogo_cliente"))
-                
+
         productos_disponibles = db_cursor.query(Producto).filter(Producto.activo == True, Producto.stock > 0).all()
         clientes = db_cursor.query(Cliente).filter_by(activo=True).all()
-        
+
         return render_template("catalogo_cliente.html", productos=productos_disponibles, clientes=clientes)
     finally:
         db_cursor.close()
-        
+
+
 @pedidos_bp.route('/pendientes', methods=['GET'])
 def ver_pendientes():
     db_cursor = Session()
@@ -49,20 +50,39 @@ def ver_pendientes():
     finally:
         db_cursor.close()
 
+
 @pedidos_bp.route('/confirmar/<int:id_pedido>', methods=['POST'])
 def confirmar_pedido(id_pedido):
     db_cursor = Session()
     try:
         pedido = db_cursor.query(Pedido).filter_by(id_pedido=id_pedido).first()
-        if pedido:
-            # Actualizamos el estado para sacarlo de la lista de pendientes
+
+        if pedido and pedido.estado == "Pendiente de retiro":
+            # 1) crear la venta, a nombre del cliente del pedido
+            nueva_venta = Venta(fk_id_cliente=pedido.fk_id_cliente)
+            db_cursor.add(nueva_venta)
+            db_cursor.flush()  # asegura que nueva_venta.id_venta esté disponible
+
+            # 2) por cada producto del pedido, crear un detalle de venta
+            for detalle in pedido.detalles:
+                detalle_venta = DetalleVenta(
+                    fk_id_venta=nueva_venta.id_venta,
+                    fk_id_producto=detalle.fk_id_producto,
+                    cantidad=detalle.cantidad,
+                    precio_venta=detalle.precio_unitario
+                )
+                db_cursor.add(detalle_venta)
+
+            # 3) cambiar el estado y guardar todo
             pedido.estado = "Confirmado y Entregado"
             db_cursor.commit()
-        return redirect(url_for('pedidos.ver_pendientes'))
 
-    
+            flash("Pedido confirmado: se registró la venta.")
+
+        return redirect(url_for('pedidos.ver_pendientes'))
     finally:
         db_cursor.close()
+
 
 @pedidos_bp.route('/rechazar/<int:id_pedido>', methods=['POST'])
 def rechazar_pedido(id_pedido):
@@ -79,14 +99,14 @@ def rechazar_pedido(id_pedido):
                 if producto:
                     producto.stock += detalle.cantidad
                     stock_devueltos += detalle.cantidad
-                   
+
             # 2) cambiar el estado del pedido a "Rechazado"
             pedido.estado = "Rechazado"
-            
+
             # 3) guardar los cambios en la base
             db_cursor.commit()
-         
-            flash("Pedido rechazado: se devolvió el stock reservado.")
+
+            flash("Pedido rechazado: se devolvieron " + str(stock_devueltos) + " unidades al stock.")
 
         return redirect(url_for('pedidos.ver_pendientes'))
     finally:
