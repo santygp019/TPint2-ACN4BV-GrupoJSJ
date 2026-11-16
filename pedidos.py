@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from db import Session, Producto, Cliente, Pedido, DetallePedido, Venta, DetalleVenta
 
 pedidos_bp = Blueprint('pedidos', __name__, url_prefix='/pedidos')
@@ -109,5 +109,20 @@ def rechazar_pedido(id_pedido):
             flash("Pedido rechazado: se devolvieron " + str(stock_devueltos) + " unidades al stock.")
 
         return redirect(url_for('pedidos.ver_pendientes'))
+    finally:
+        db_cursor.close()
+
+@pedidos_bp.route('/mis_pedidos', methods=['GET'])
+def mis_pedidos():
+    # el cliente tiene que haber ingresado
+    id_cliente = session.get("id_cliente")
+    if not id_cliente:
+        return redirect(url_for("ingresar"))
+
+    db_cursor = Session()
+    try:
+        # traer solo los pedidos de ese cliente, del más nuevo al más viejo
+        pedidos = db_cursor.query(Pedido).filter_by(fk_id_cliente=id_cliente).order_by(Pedido.fecha.desc()).all()
+        return render_template("mis_pedidos.html", pedidos=pedidos)
     finally:
         db_cursor.close()
