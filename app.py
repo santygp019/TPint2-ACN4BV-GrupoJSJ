@@ -6,12 +6,13 @@ from compras import cargar_formulario_compra, procesar_nueva_compra, historial_c
 from proveedores import agregarProveedor
 from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
-
+from auth import auth_bp
 
 app = Flask(__name__)  
 app.secret_key = 'admin123'
 
 app.register_blueprint(pedidos_bp)
+app.register_blueprint(auth_bp)
 
 crearTablas()
 
