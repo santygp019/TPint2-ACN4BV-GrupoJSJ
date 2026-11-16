@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean, DateTime,func
+from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 
@@ -112,6 +113,17 @@ class DetallePedido(Base):
 
     pedido = relationship("Pedido", back_populates="detalles")
     producto = relationship("Producto")
+
+class Usuario(Base):
+    __tablename__ = "usuario"
+
+    id_usuario = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+    clave_hash = Column(String)
+    rol = Column(String, nullable=False)
+    activo = Column(Boolean, default=True)
+    fk_id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"), nullable=True)
     
     
 def crearTablas():
@@ -126,5 +138,28 @@ def crearTablas():
     if not categoria_existente:
         db_cursor.add(Categoria(nombre="Electronica"))
         db_cursor.commit()
+
+    if not db_cursor.query(Usuario).first():
+        db_cursor.add(Usuario(
+            nombre="Administrador JSJ",
+            email="admin@jsj.com",
+            clave_hash=generate_password_hash("admin123"),
+            rol="administrador"
+        ))
+        db_cursor.add(Usuario(
+            nombre="Empleado JSJ",
+            email="empleado@jsj.com",
+            clave_hash=generate_password_hash("empleado123"),
+            rol="empleado"
+        )) 
+        db_cursor.add(Usuario(
+            nombre="Cliente JSJ",
+            email="cliente@jsj.com",
+            clave_hash=generate_password_hash("cliente123"),
+            rol="cliente"
+        ))
+        
+        db_cursor.commit()
+
     db_cursor.close()
 
