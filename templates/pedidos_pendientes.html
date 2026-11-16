@@ -5,7 +5,11 @@
 {% block content %}
 <div class="ventas-container">
     <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Gestión de Pedidos Pendientes</h2>
-
+{% with mensajes = get_flashed_messages() %}
+  {% for m in mensajes %}
+    <p style="color: red; font-weight: bold;">{{ m }}</p>
+  {% endfor %}
+{% endwith %}
     {% if pedidos %}
     <table class="ventas-table">
         <thead>
@@ -32,8 +36,11 @@
             </td>
             <td>
                 <form action="{{ url_for('pedidos.confirmar_pedido', id_pedido=pedido.id_pedido) }}" method="POST">
-                    <button type="submit" class="ventas-btn" style="background-color: #15803d; width: 100%;">Confirmar Entrega</button>
-                </form>
+    <button type="submit" class="ventas-btn" style="background-color: #15803d; width: 100%;">Confirmar Entrega</button>
+</form>
+                <form action="{{ url_for('pedidos.rechazar_pedido', id_pedido=pedido.id_pedido) }}" method="POST" style="margin-top: 6px;">
+    <button type="submit" class="ventas-btn" style="background-color: #b91c1c; width: 100%;">Rechazar</button>
+</form>
             </td>
          </tr>
          {% endfor %}       

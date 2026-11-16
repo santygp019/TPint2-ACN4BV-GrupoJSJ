@@ -59,5 +59,35 @@ def confirmar_pedido(id_pedido):
             pedido.estado = "Confirmado y Entregado"
             db_cursor.commit()
         return redirect(url_for('pedidos.ver_pendientes'))
+
+    
+    finally:
+        db_cursor.close()
+
+@pedidos_bp.route('/rechazar/<int:id_pedido>', methods=['POST'])
+def rechazar_pedido(id_pedido):
+    db_cursor = Session()
+    try:
+        pedido = db_cursor.query(Pedido).filter_by(id_pedido=id_pedido).first()
+
+        if pedido and pedido.estado == "Pendiente de retiro":
+            # 1) devolver al stock lo que se había reservado
+            stock_devueltos = 0
+
+            for detalle in pedido.detalles:
+                producto = db_cursor.query(Producto).filter_by(id_producto=detalle.fk_id_producto).first()
+                if producto:
+                    producto.stock += detalle.cantidad
+                    stock_devueltos += detalle.cantidad
+                   
+            # 2) cambiar el estado del pedido a "Rechazado"
+            pedido.estado = "Rechazado"
+            
+            # 3) guardar los cambios en la base
+            db_cursor.commit()
+         
+            flash("Pedido rechazado: se devolvió el stock reservado.")
+
+        return redirect(url_for('pedidos.ver_pendientes'))
     finally:
         db_cursor.close()
