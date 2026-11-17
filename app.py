@@ -1,4 +1,4 @@
-﻿import os 
+﻿import os
 from dotenv import load_dotenv
 from db import crearTablas, Session, Producto
 from flask import Flask, render_template, request 
@@ -13,7 +13,7 @@ from auth import auth_bp
 load_dotenv()
 
 app = Flask(__name__)  
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 
 app.register_blueprint(pedidos_bp)
 app.register_blueprint(auth_bp)

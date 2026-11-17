@@ -1,9 +1,13 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean, DateTime,func
+import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Boolean, DateTime, func
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
+load_dotenv()
 
-motorDB = create_engine("sqlite:///ferreteriaJSJ.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///ferreteriaJSJ.db")
+motorDB = create_engine(DATABASE_URL)
 
 Base = declarative_base()
 ### se le agrego el expire debido a que se pierden los datos al hacer la consulta y me daba error la categoria
