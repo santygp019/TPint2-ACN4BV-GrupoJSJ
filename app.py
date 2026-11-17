@@ -1,4 +1,6 @@
-﻿from db import crearTablas, Session, Producto
+﻿import os 
+from dotenv import load_dotenv
+from db import crearTablas, Session, Producto
 from flask import Flask, render_template, request 
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
@@ -8,8 +10,10 @@ from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
 from auth import auth_bp
 
+load_dotenv()
+
 app = Flask(__name__)  
-app.secret_key = 'admin123'
+app.secret_key = os.getenv('SECRET_KEY')
 
 app.register_blueprint(pedidos_bp)
 app.register_blueprint(auth_bp)
