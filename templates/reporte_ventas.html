@@ -23,7 +23,10 @@
             <tr>
                 <th>Nombre del Producto</th>
                 <th>Unidades Vendidas</th>
-                <th>Ingreso Total Generado</th>
+                <th>Ingreso Total (ARS)</th>
+                {% if dolar and dolar.disponible and dolar.venta > 0 %}
+                <th>Equivalente (USD)</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -32,6 +35,11 @@
             <td style="font-weight: bold;">{{ item.nombre }}</td>
             <td style="font-weight: bold; color: var(--hw-orange);">{{ item.total_vendido }} un.</td>
             <td>${{ "{:,.2f}".format(item.ingreso_total) }}</td>
+            {% if dolar and dolar.disponible and dolar.venta > 0 %}
+            <td style="color: #15803d; font-weight: bold;">
+                US$ {{ "{:,.2f}".format(item.ingreso_total / dolar.venta) }}
+            </td>
+            {% endif %}
          </tr>
          {% endfor %}       
         </tbody>

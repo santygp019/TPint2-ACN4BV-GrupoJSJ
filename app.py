@@ -9,6 +9,7 @@ from proveedores import agregarProveedor
 from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
 from auth import auth_bp
+from api_dolar import obtener_cotizacion_dolar
 
 load_dotenv()
 
@@ -19,6 +20,10 @@ app.register_blueprint(pedidos_bp)
 app.register_blueprint(auth_bp)
 
 crearTablas()
+
+@app.context_processor
+def inyectar_dolar():
+    return dict(dolar=obtener_cotizacion_dolar())
 
 @app.route("/")
 def home():

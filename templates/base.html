@@ -10,8 +10,15 @@
 </head>
 <body>
     <header class="hw-header">
-        <div class="hw-brand" style="display: flex; justify-content: center; align-items: center;">
+        <div class="hw-brand" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <h1 style="margin: 0;"><a href="{{ url_for('home') }}" style="color: var(--hw-white); text-decoration: none;">Ferretería JSJ</a></h1>
+
+            {% if dolar and dolar.disponible %}
+            <div style="background-color: var(--hw-gray); padding: 6px 14px; border-radius: 6px; border: 1px solid var(--hw-border); font-size: 0.9rem;">
+                <span style="color: var(--hw-yellow); font-weight: bold;">Dólar Oficial:</span>
+                <span>Compra ${{ "%.2f"|format(dolar.compra) }} | Venta ${{ "%.2f"|format(dolar.venta) }}</span>
+            </div>
+            {% endif %}
         </div>
 
         <nav class="hw-navbar">
