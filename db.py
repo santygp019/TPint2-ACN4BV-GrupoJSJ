@@ -150,17 +150,27 @@ def crearTablas():
             clave_hash=generate_password_hash("admin123"),
             rol="administrador"
         ))
+
         db_cursor.add(Usuario(
             nombre="Empleado JSJ",
             email="empleado@jsj.com",
             clave_hash=generate_password_hash("empleado123"),
             rol="empleado"
         )) 
+        
+        cliente_prueba = Cliente(
+            nombre="Cliente JSJ",
+            email="cliente@jsj.com"
+        )
+        db_cursor.add(cliente_prueba)
+        db_cursor.flush()  # genera el id_cliente sin cerrar la transacción
+
         db_cursor.add(Usuario(
             nombre="Cliente JSJ",
             email="cliente@jsj.com",
             clave_hash=generate_password_hash("cliente123"),
-            rol="cliente"
+            rol="cliente",
+            fk_id_cliente=cliente_prueba.id_cliente
         ))
         
         db_cursor.commit()
