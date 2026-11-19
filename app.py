@@ -8,13 +8,17 @@ from compras import cargar_formulario_compra, procesar_nueva_compra, historial_c
 from proveedores import agregarProveedor
 from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
-from auth import auth_bp, requiere_rol
+from auth import auth_bp, requiere_rol, iniciar_google
 from api_dolar import obtener_cotizacion_dolar
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
 
-app = Flask(__name__)  
+app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+iniciar_google(app)
 
 app.register_blueprint(pedidos_bp)
 app.register_blueprint(auth_bp)

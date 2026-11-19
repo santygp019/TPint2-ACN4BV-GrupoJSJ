@@ -1,9 +1,25 @@
+import os
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import check_password_hash
-from db import Session, Usuario
+from authlib.integrations.flask_client import OAuth
+from authlib.integrations.base_client.errors import OAuthError
+from db import Session, Usuario, Cliente
 
 auth_bp = Blueprint('auth', __name__)
+
+oauth = OAuth()
+
+
+def iniciar_google(app):
+    oauth.init_app(app)
+    oauth.register(
+        name="google",
+        client_id=os.getenv("GOOGLE_CLIENT_ID"),
+        client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+        server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+        client_kwargs={"scope": "openid email profile"},
+    )
 
 
 def requiere_rol(*roles_permitidos):
@@ -47,6 +63,64 @@ def login():
         return redirect(url_for("auth.login"))
 
     return render_template("login.html")
+
+
+@auth_bp.route('/login/google')
+def login_google():
+    redirect_uri = url_for('auth.google_callback', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+
+@auth_bp.route('/auth/callback')
+def google_callback():
+    try:
+        token = oauth.google.authorize_access_token()
+        info = token.get("userinfo")
+    except OAuthError as e:
+        print("Error de Google:", e)
+        flash("No pudimos iniciar sesión con Google. Probá de nuevo.")
+        return redirect(url_for("auth.login"))
+
+    if not info or not info.get("email") or not info.get("email_verified"):
+        flash("Google no nos dio un email verificado.")
+        return redirect(url_for("auth.login"))
+
+    email = info["email"].strip().lower()
+    nombre = info.get("name") or email
+
+    db_cursor = Session()
+    try:
+        usuario = db_cursor.query(Usuario).filter_by(email=email).first()
+
+        if usuario and not usuario.activo:
+            flash("Tu cuenta está desactivada.")
+            return redirect(url_for("auth.login"))
+
+        # primera vez que entra con Google: se crea como cliente
+        if not usuario:
+            cliente = Cliente(nombre=nombre, email=email)
+            db_cursor.add(cliente)
+            db_cursor.flush()
+            usuario = Usuario(
+                nombre=nombre,
+                email=email,
+                clave_hash=None,
+                rol="cliente",
+                fk_id_cliente=cliente.id_cliente
+            )
+            db_cursor.add(usuario)
+            db_cursor.commit()
+
+        session.clear()
+        session["id_usuario"] = usuario.id_usuario
+        session["nombre"] = usuario.nombre
+        session["rol"] = usuario.rol
+        session["id_cliente"] = usuario.fk_id_cliente
+    finally:
+        db_cursor.close()
+
+    flash("Bienvenido, " + nombre + ".")
+    return redirect(url_for("home"))
 
 
 @auth_bp.route('/logout')
