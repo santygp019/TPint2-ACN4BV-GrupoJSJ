@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from db import Session, Producto, Cliente, Pedido, DetallePedido, Venta, DetalleVenta
+from auth import requiere_rol
 
 pedidos_bp = Blueprint('pedidos', __name__, url_prefix='/pedidos')
 
@@ -41,6 +42,7 @@ def catalogo_cliente():
 
 
 @pedidos_bp.route('/pendientes', methods=['GET'])
+@requiere_rol("administrador", "empleado")
 def ver_pendientes():
     db_cursor = Session()
     try:
@@ -52,6 +54,7 @@ def ver_pendientes():
 
 
 @pedidos_bp.route('/confirmar/<int:id_pedido>', methods=['POST'])
+@requiere_rol("administrador", "empleado")
 def confirmar_pedido(id_pedido):
     db_cursor = Session()
     try:
@@ -85,6 +88,7 @@ def confirmar_pedido(id_pedido):
 
 
 @pedidos_bp.route('/rechazar/<int:id_pedido>', methods=['POST'])
+@requiere_rol("administrador", "empleado")
 def rechazar_pedido(id_pedido):
     db_cursor = Session()
     try:
@@ -112,7 +116,9 @@ def rechazar_pedido(id_pedido):
     finally:
         db_cursor.close()
 
+
 @pedidos_bp.route('/mis_pedidos', methods=['GET'])
+@requiere_rol("cliente")
 def mis_pedidos():
     # el cliente tiene que haber ingresado
     id_cliente = session.get("id_cliente")
