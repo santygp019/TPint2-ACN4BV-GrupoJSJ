@@ -5,6 +5,8 @@ from auth import requiere_rol
 pedidos_bp = Blueprint('pedidos', __name__, url_prefix='/pedidos')
 
 @pedidos_bp.route('/catalogo', methods=['GET', 'POST'])
+
+
 def catalogo_cliente():
     db_cursor = Session()
     try:
@@ -43,6 +45,8 @@ def catalogo_cliente():
 
 @pedidos_bp.route('/pendientes', methods=['GET'])
 @requiere_rol("administrador", "empleado")
+
+
 def ver_pendientes():
     db_cursor = Session()
     try:
@@ -55,6 +59,8 @@ def ver_pendientes():
 
 @pedidos_bp.route('/confirmar/<int:id_pedido>', methods=['POST'])
 @requiere_rol("administrador", "empleado")
+
+
 def confirmar_pedido(id_pedido):
     db_cursor = Session()
     try:
@@ -78,17 +84,25 @@ def confirmar_pedido(id_pedido):
 
             # 3) cambiar el estado y guardar todo
             pedido.estado = "Confirmado y Entregado"
+            
             db_cursor.commit()
 
             flash("Pedido confirmado: se registró la venta.")
 
-        return redirect(url_for('pedidos.ver_pendientes'))
+    except Exception:
+        # si algo falla, se deshace todo lo que se había hecho a medias
+        db_cursor.rollback()
+        flash("No se pudo confirmar el pedido. Probá de nuevo.")
+
     finally:
         db_cursor.close()
 
+    return redirect(url_for('pedidos.ver_pendientes'))
 
 @pedidos_bp.route('/rechazar/<int:id_pedido>', methods=['POST'])
 @requiere_rol("administrador", "empleado")
+
+
 def rechazar_pedido(id_pedido):
     db_cursor = Session()
     try:
@@ -112,13 +126,16 @@ def rechazar_pedido(id_pedido):
 
             flash("Pedido rechazado: se devolvieron " + str(stock_devueltos) + " unidades al stock.")
 
-        return redirect(url_for('pedidos.ver_pendientes'))
+    except Exception:
+        # si algo falla, se deshace todo lo que se había hecho a medias
+        db_cursor.rollback()
+        flash("No se pudo rechazar el pedido. Probá de nuevo.")
+
     finally:
         db_cursor.close()
 
+    return redirect(url_for('pedidos.ver_pendientes'))
 
-@pedidos_bp.route('/mis_pedidos', methods=['GET'])
-@requiere_rol("cliente")
 def mis_pedidos():
     # el cliente tiene que haber ingresado
     id_cliente = session.get("id_cliente")
