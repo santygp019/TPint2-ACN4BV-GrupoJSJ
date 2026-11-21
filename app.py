@@ -1,7 +1,9 @@
 ﻿import os
 from dotenv import load_dotenv
-from db import crearTablas, Session, Producto
-from flask import Flask, render_template, request 
+from db import crearTablas, Session, Producto, Pedido, Venta, DetalleVenta
+from sqlalchemy import func
+from datetime import datetime, timedelta
+from flask import Flask, render_template, request, session
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
 from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
 from compras import cargar_formulario_compra, procesar_nueva_compra, historial_compras
@@ -31,7 +33,37 @@ def inyectar_dolar():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    resumen = None
+
+    # los números del panel solo se calculan para admin y empleado
+    if session.get("rol") in ["administrador", "empleado"]:
+        db_cursor = Session()
+        try:
+            # inicio del día de hoy en Argentina (la base guarda en UTC, 3 horas adelantada)
+            ahora_ar = datetime.utcnow() - timedelta(hours=3)
+            inicio_dia_ar = ahora_ar.replace(hour=0, minute=0, second=0, microsecond=0)
+            inicio_utc = inicio_dia_ar + timedelta(hours=3)
+
+            pedidos_pendientes = db_cursor.query(Pedido).filter_by(estado="Pendiente de retiro").count()
+
+            ventas_hoy = db_cursor.query(Venta).filter(Venta.fecha >= inicio_utc).count()
+
+            total_hoy = db_cursor.query(func.sum(DetalleVenta.cantidad * DetalleVenta.precio_venta)) \
+                .join(Venta, Venta.id_venta == DetalleVenta.fk_id_venta) \
+                .filter(Venta.fecha >= inicio_utc).scalar() or 0
+
+            resumen = {
+                "pedidos_pendientes": pedidos_pendientes,
+                "ventas_hoy": ventas_hoy,
+                "total_hoy": total_hoy
+            }
+        except Exception:
+            # si falla la consulta, el panel igual se muestra (sin números)
+            resumen = None
+        finally:
+            db_cursor.close()
+
+    return render_template("index.html", resumen=resumen)
 
 # --- RUTAS SOLO ADMINISTRADOR ---
 @app.route("/agregar_productos", methods=["GET", "POST"])
