@@ -85,7 +85,7 @@ def eliminarProducto(id_producto):
 
     return redirect(url_for("verListaProductos"))
 
-
+     
 def mostrarListaProducto():
     db_cursor = Session()
     try: 
