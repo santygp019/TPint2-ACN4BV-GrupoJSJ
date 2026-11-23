@@ -76,3 +76,98 @@
 .btn-espaciado {
     margin-left: 5px;
 }
+
+/* --- PEDIDOS (cliente y vendedor) --- */
+.titulo-seccion {
+    margin-top: 0;
+    color: var(--hw-dark, #111827);
+    border-bottom: 2px solid var(--hw-orange, #ea580c);
+    padding-bottom: 10px;
+}
+
+.num-pedido {
+    font-weight: bold;
+    color: var(--hw-orange, #ea580c);
+}
+
+.nombre-cliente {
+    font-weight: bold;
+}
+
+.lista-detalle {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.estado-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.estado-pendiente {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.estado-confirmado {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.estado-rechazado {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.btn-confirmar,
+.btn-rechazar {
+    width: 100%;
+}
+
+.btn-confirmar {
+    background-color: #15803d;
+}
+
+.btn-confirmar:hover {
+    background-color: #166534;
+}
+
+.btn-rechazar {
+    background-color: #b91c1c;
+}
+
+.btn-rechazar:hover {
+    background-color: #991b1b;
+}
+
+.form-rechazar {
+    margin-top: 6px;
+}
+
+.cola-vacia {
+    background-color: #dcfce7;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #15803d;
+    margin-top: 20px;
+}
+
+.cola-vacia p {
+    color: #15803d;
+    font-weight: bold;
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.aviso-vacio {
+    font-weight: bold;
+}
+
+.volver {
+    margin-top: 20px;
+}

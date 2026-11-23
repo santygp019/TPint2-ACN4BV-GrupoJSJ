@@ -124,7 +124,10 @@ def rechazar_pedido(id_pedido):
             # 3) guardar los cambios en la base
             db_cursor.commit()
 
-            flash("Pedido rechazado: se devolvieron " + str(stock_devueltos) + " unidades al stock.")
+            if stock_devueltos == 1:
+                flash("Pedido rechazado: se devolvió 1 unidad al stock.")
+            else:
+                flash("Pedido rechazado: se devolvieron " + str(stock_devueltos) + " unidades al stock.")
 
     except Exception:
         # si algo falla, se deshace todo lo que se había hecho a medias
@@ -136,6 +139,8 @@ def rechazar_pedido(id_pedido):
 
     return redirect(url_for('pedidos.ver_pendientes'))
 
+@pedidos_bp.route('/mis_pedidos', methods=['GET'])
+@requiere_rol("cliente")
 def mis_pedidos():
     # el cliente tiene que haber ingresado
     id_cliente = session.get("id_cliente")

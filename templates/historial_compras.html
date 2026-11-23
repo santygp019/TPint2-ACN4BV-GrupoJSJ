@@ -39,7 +39,7 @@
          {% for compra in compras %}
          <tr>
             <td style="font-weight: bold; color: var(--hw-orange);">#{{ compra.id_compra }}</td>
-            <td>{{ compra.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ compra.fecha|hora_ar }}</td>
             <td style="font-weight: bold;">{{ compra.Proveedor.nombre }}</td>
             <td>
                 <ul style="margin: 0; padding-left: 20px;">

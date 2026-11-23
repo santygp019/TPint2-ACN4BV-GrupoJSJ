@@ -31,6 +31,13 @@ crearTablas()
 def inyectar_dolar():
     return dict(dolar=obtener_cotizacion_dolar())
 
+@app.template_filter("hora_ar")
+def hora_ar(fecha):
+    # la base guarda la fecha en UTC: se muestra en hora argentina (UTC-3)
+    if not fecha:
+        return ""
+    return (fecha - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M")
+
 @app.route("/")
 def home():
     resumen = None
