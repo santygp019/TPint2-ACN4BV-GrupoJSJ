@@ -12,19 +12,27 @@
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th>Categoría</th>
+                {% if session.get('rol') == 'administrador' %}
                 <th>Acciones</th>
+                {% else %}
+                <th>Stock</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for pro in productos %}
             <tr>
-                <td style="font-weight: bold;">{{pro.nombre}}</td>
-                <td>${{pro.precio}}</td>
-                <td>{{pro.categoria.nombre}}</td>
+                <td style="font-weight: bold;">{{ pro.nombre }}</td>
+                <td>${{ pro.precio }}</td>
+                <td>{{ pro.categoria.nombre }}</td>
+                {% if session.get('rol') == 'administrador' %}
                 <td>
-                    <a href="{{url_for('modificarProducto', id_producto=pro.id_producto)}}" class="ventas-link" style="margin-right: 15px;">Editar</a>
-                    <a href="{{url_for('borrarProducto', id_producto=pro.id_producto)}}" onclick="return confirm('¿Estás seguro que desea eliminar este producto?')" style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
+                    <a href="{{ url_for('modificarProducto', id_producto=pro.id_producto) }}" class="ventas-link" style="margin-right: 15px;">Editar</a>
+                    <a href="{{ url_for('borrarProducto', id_producto=pro.id_producto) }}" onclick="return confirm('¿Estás seguro que desea eliminar este producto?')" style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
                 </td>
+                {% else %}
+                <td style="font-weight: bold;">{{ pro.stock }} un.</td>
+                {% endif %}
             </tr>
             {% else %}
             <tr>
