@@ -74,10 +74,12 @@ def procesarCompraCatalogo():
     try:
         #LÓGICA DE COMPRA (POST)
         if request.method == "POST":
-            # 1) el cliente tiene que haber ingresado
+            
+         # 1) tiene que haber iniciado sesión como cliente
             id_cliente = session.get("id_cliente")
-            if not id_cliente:
-                return redirect(url_for("ingresar"))
+            if session.get("rol") != "cliente" or not id_cliente:
+                flash("Tenés que iniciar sesión como cliente para hacer un pedido.")
+                return redirect(url_for("auth.login"))
 
             id_producto = request.form.get("id_producto")
 
@@ -130,6 +132,7 @@ def procesarCompraCatalogo():
         return render_template("catalogo.html", productos=productos)
     finally:
         db_cursor.close()
+
 def reporteVentas():
     db_cursor = Session()
     try:

@@ -141,11 +141,12 @@ def rechazar_pedido(id_pedido):
 
 @pedidos_bp.route('/mis_pedidos', methods=['GET'])
 @requiere_rol("cliente")
+
 def mis_pedidos():
     # el cliente tiene que haber ingresado
     id_cliente = session.get("id_cliente")
     if not id_cliente:
-        return redirect(url_for("ingresar"))
+        return redirect(url_for("auth.login"))
 
     db_cursor = Session()
     try:

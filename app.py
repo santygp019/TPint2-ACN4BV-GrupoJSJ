@@ -5,7 +5,7 @@ from sqlalchemy import func
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, session
 from producto import agregarProductos, mostrarListaProducto, reporte_stock_critico, editarProducto, eliminarProducto
-from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
+from clientes import agregarCliente, editarCliente, darBajaCliente, verMiPerfil
 from compras import cargar_formulario_compra, procesar_nueva_compra, historial_compras
 from proveedores import agregarProveedor
 from pedidos import pedidos_bp
@@ -155,9 +155,6 @@ def verStockCritico():
 def catalogoCliente():
     return procesarCompraCatalogo()
 
-@app.route("/ingresar", methods=["GET", "POST"])
-def ingresar():
-    return ingresarCliente()
 
 @app.route("/mi_perfil", methods=["GET", "POST"])
 @requiere_rol("cliente")
