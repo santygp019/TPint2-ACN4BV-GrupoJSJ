@@ -175,5 +175,14 @@ def crearTablas():
         
         db_cursor.commit()
 
+            # repara el usuario de prueba del cliente si quedó sin cliente vinculado
+    usuario_cliente = db_cursor.query(Usuario).filter_by(email="cliente@jsj.com").first()
+    if usuario_cliente and not usuario_cliente.fk_id_cliente:
+        cliente_prueba = Cliente(nombre="Cliente JSJ", email="cliente@jsj.com")
+        db_cursor.add(cliente_prueba)
+        db_cursor.flush()
+        usuario_cliente.fk_id_cliente = cliente_prueba.id_cliente
+        db_cursor.commit()
+
     db_cursor.close()
 
