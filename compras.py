@@ -50,6 +50,12 @@ def procesar_nueva_compra():
         cant = int(request.form["cantidad"])
         precio = float(request.form["precio_compra"])
 
+        if cant < 1:
+            return cargar_formulario_compra(mensaje="Error: La cantidad debe ser mayor o igual a 1.")
+
+        if precio < 1:
+            return cargar_formulario_compra(mensaje="Error: El precio de compra debe ser mayor o igual a 1.")
+
         nueva_compra = Compra(fk_id_proveedor=id_prov)
         db_cursor.add(nueva_compra)
         db_cursor.flush()
