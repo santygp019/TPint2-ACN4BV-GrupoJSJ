@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Crear cuenta - JSJ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-pagina">
+    <div class="login-tarjeta">
+        <h2 class="login-titulo">Crear cuenta</h2>
+        <p class="login-subtitulo">Registrate como cliente para hacer pedidos</p>
+
+        <form action="{{ url_for('auth.registro') }}" method="post" class="login-form">
+            <div class="login-campo">
+                <label for="nombre">Nombre y apellido</label>
+                <input type="text" id="nombre" name="nombre" class="ventas-input" autocomplete="name" required>
+            </div>
+            <div class="login-campo">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="ventas-input" autocomplete="email" required>
+            </div>
+            <div class="login-campo">
+                <label for="telefono">Teléfono (opcional)</label>
+                <input type="text" id="telefono" name="telefono" class="ventas-input" autocomplete="tel">
+            </div>
+            <div class="login-campo">
+                <label for="clave">Clave (mínimo 6 caracteres)</label>
+                <input type="password" id="clave" name="clave" class="ventas-input" autocomplete="new-password" minlength="6" required>
+            </div>
+            <div class="login-campo">
+                <label for="confirmar_clave">Confirmar clave</label>
+                <input type="password" id="confirmar_clave" name="confirmar_clave" class="ventas-input" autocomplete="new-password" minlength="6" required>
+            </div>
+
+            <button type="submit" class="ventas-btn login-btn">Registrarse</button>
+        </form>
+
+        <p class="login-subtitulo" style="margin-top: 16px;">
+            ¿Ya tenés cuenta? <a href="{{ url_for('auth.login') }}">Iniciá sesión</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
