@@ -155,9 +155,6 @@ def verStockCritico():
 def catalogoCliente():
     return procesarCompraCatalogo()
 
-@app.route("/ingresar", methods=["GET", "POST"])
-def ingresar():
-    return ingresarCliente()
 
 @app.route("/mi_perfil", methods=["GET", "POST"])
 @requiere_rol("cliente")

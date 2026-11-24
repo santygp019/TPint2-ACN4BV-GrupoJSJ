@@ -35,13 +35,15 @@
             <td>
                 <span style="color: #15803d; font-weight: bold; margin-bottom: 8px; display: block;">Disponible ({{ pro.stock }} en stock)</span>
                 
+                {% if session.get('rol') == 'cliente' %}
                 <form action="{{ url_for('catalogoCliente') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
                     <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                    
                     <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
-                    
                     <button class="ventas-btn" type="submit" style="background-color: #15803d;">Hacer Pedido</button>
                 </form>
+                {% elif not session.get('id_usuario') %}
+                <a href="{{ url_for('auth.login') }}" class="ventas-btn" style="text-decoration: none; display: inline-block;">Iniciar sesión para pedir</a>
+                {% endif %}
             </td>
          </tr>
          {% endfor %}       

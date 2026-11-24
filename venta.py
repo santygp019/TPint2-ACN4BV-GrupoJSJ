@@ -74,11 +74,12 @@ def procesarCompraCatalogo():
     try:
         #LÓGICA DE COMPRA (POST)
         if request.method == "POST":
-            # 1) el cliente tiene que haber ingresado
-            id_cliente = session.get("id_cliente")
-            if not id_cliente:
-                return redirect(url_for("ingresar"))
+            if session.get("rol") != "cliente" or not session.get("id_cliente"):
+                flash("Tenés que iniciar sesión como cliente para hacer un pedido.")
+                return redirect(url_for("auth.login"))
 
+            id_cliente = session.get("id_cliente")
+            
             id_producto = request.form.get("id_producto")
 
             try:
