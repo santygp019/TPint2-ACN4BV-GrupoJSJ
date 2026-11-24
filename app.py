@@ -8,11 +8,11 @@ from producto import agregarProductos, mostrarListaProducto, reporte_stock_criti
 from clientes import agregarCliente, editarCliente, darBajaCliente, ingresarCliente, verMiPerfil
 from compras import cargar_formulario_compra, procesar_nueva_compra, historial_compras
 from proveedores import agregarProveedor
-from venta import ventaProducto, procesarCompraCatalogo, reporteVentas
 from pedidos import pedidos_bp
 from auth import auth_bp, requiere_rol, iniciar_google
 from api_dolar import obtener_cotizacion_dolar
 from werkzeug.middleware.proxy_fix import ProxyFix
+from venta import ventaProducto, procesarCompraCatalogo, reporteVentas, ventasMostrador
 
 load_dotenv()
 
@@ -138,6 +138,12 @@ def verListaProductos():
 @requiere_rol("administrador", "empleado")
 def seccionVentas():
     return ventaProducto()
+
+@app.route("/ventas/mostrador", methods=["GET"])
+@requiere_rol("administrador", "empleado")
+def verVentasMostrador():
+    return ventasMostrador()
+
 
 @app.route("/reportes/stock_critico")
 @requiere_rol("administrador", "empleado")

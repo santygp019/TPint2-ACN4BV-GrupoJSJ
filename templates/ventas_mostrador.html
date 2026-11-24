@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Ventas de Mostrador - JSJ{% endblock %}
+
+{% block content %}
+<div class="ventas-container">
+    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Registro de Ventas de Mostrador</h2>
+
+    <table class="ventas-table">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Fecha</th>
+                <th>Detalle</th>
+                <th>Total cobrado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in filas %}
+            <tr>
+                <td>{{ f.id }}</td>
+                <td>{{ f.fecha }}</td>
+                <td>{{ f.detalle }}</td>
+                <td style="font-weight: bold;">${{ "%.2f"|format(f.total) }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: gray; font-style: italic; padding: 20px;">Todavía no hay ventas de mostrador.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% if filas %}
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right; font-weight: bold;">Total de las ventas listadas</td>
+                <td style="font-weight: bold;">${{ "%.2f"|format(total_general) }}</td>
+            </tr>
+        </tfoot>
+        {% endif %}
+    </table>
+</div>
+{% endblock %}

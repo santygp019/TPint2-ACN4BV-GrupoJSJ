@@ -38,7 +38,8 @@ def ventaProducto():
                 db_cursor.add(detalle)
                 db_cursor.commit()
 
-                flash("Venta registrada: se descontaron " + str(cantidad_vendida) + " unidades del stock.")
+                total = cantidad_vendida * producto.precio
+                flash("Venta registrada: " + str(cantidad_vendida) + " x " + producto.nombre + " | Total a cobrar: $" + str(round(total, 2)))
                 return redirect(url_for("seccionVentas"))
 
             flash("No hay stock suficiente o el producto no existe.")
@@ -159,3 +160,22 @@ def reporteVentas():
         return render_template("reporte_ventas.html", resultados=resultados, periodo_actual=periodo)
     finally:
         db_cursor.close()
+        
+def ventasMostrador():
+    db_cursor = Session()
+    try:
+        # Ventas de mostrador = ventas sin cliente (los pedidos web confirmados tienen cliente)
+        ventas = db_cursor.query(Venta).filter(Venta.fk_id_cliente.is_(None))\
+                          .order_by(desc(Venta.id_venta)).limit(100).all()
+        filas = []
+        total_general = 0
+        for v in ventas:
+            total = sum(d.cantidad * d.precio_venta for d in v.detalles)
+            total_general += total
+            detalle = ", ".join(str(d.cantidad) + " x " + d.producto.nombre for d in v.detalles)
+            fecha = (v.fecha - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M") if v.fecha else "-"
+            filas.append({"id": v.id_venta, "fecha": fecha, "detalle": detalle, "total": total})
+        return render_template("ventas_mostrador.html", filas=filas, total_general=total_general)
+    finally:
+        db_cursor.close()
+        

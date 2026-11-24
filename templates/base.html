@@ -35,6 +35,7 @@
                 <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link">Stock Crítico</a></li>
                 <li><a href="{{url_for('ver_reporte_ventas')}}" class="hw-nav-link">Reporte de Ventas</a></li>
                 <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link">Punto de Venta</a></li>
+                <li><a href="{{url_for('verVentasMostrador')}}" class="hw-nav-link">Ventas Mostrador</a></li>
                 <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link">Pedidos</a></li>
 
                 {% elif session.get('rol') == 'empleado' %}
@@ -43,6 +44,7 @@
                 <li><a href="{{url_for('verListaProductos')}}" class="hw-nav-link">Productos</a></li>
                 <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link">Stock Crítico</a></li>
                 <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link">Pedidos</a></li>
+                <li><a href="{{url_for('verVentasMostrador')}}" class="hw-nav-link">Ventas Mostrador</a></li>
 
                 {% elif session.get('rol') == 'cliente' %}
                 <li><a href="{{url_for('catalogoCliente')}}" class="hw-nav-link">Catálogo</a></li>
