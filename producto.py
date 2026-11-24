@@ -46,7 +46,7 @@ def editarProducto(id_producto):
 
     if not producto:
         db_cursor.close()
-        return redirect(url_for("cargarProducto"))
+        return redirect(url_for("verListaProductos"))
 
     error = None
 
@@ -64,7 +64,7 @@ def editarProducto(id_producto):
             db_cursor.commit()
             db_cursor.close()
 
-            return redirect(url_for("cargarProducto"))
+            return redirect(url_for("verListaProductos"))
 
     pagina = render_template("editar_producto.html", producto=producto, error=error)
     db_cursor.close()
