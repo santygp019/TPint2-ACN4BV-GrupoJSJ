@@ -42,7 +42,7 @@
                     <a href="{{url_for('modificarCliente', id_cliente=cli.id_cliente)}}" class="ventas-link" style="margin-right: 15px;">Editar</a>
                     
                     <form action="{{url_for('bajaCliente', id_cliente=cli.id_cliente)}}" method="post" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas dar de baja a este cliente?')">
-                        <button type="submit" style="background: none; border: none; color: red; font-weight: bold; cursor: pointer; text-decoration: underline;">Dar de baja</button>
+                        <button type="submit" style="background: none; border: none; padding: 0; font: inherit; color: red; font-weight: bold; cursor: pointer; text-decoration: none;">Eliminar</button>
                     </form>
                 </td>
             </tr>

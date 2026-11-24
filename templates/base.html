@@ -32,21 +32,21 @@
                 <li><a href="{{url_for('cargarProveedor')}}" class="hw-nav-link">Proveedores</a></li>
                 <li><a href="/compras/nueva" class="hw-nav-link">Comprar Stock</a></li>
                 <li><a href="{{url_for('ver_historial_compras')}}" class="hw-nav-link">Historial</a></li>
-                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link warning-link">Stock Crítico</a></li>
-                <li><a href="{{url_for('ver_reporte_ventas')}}" class="hw-nav-link warning-link">Reporte de Ventas</a></li>
+                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link">Stock Crítico</a></li>
+                <li><a href="{{url_for('ver_reporte_ventas')}}" class="hw-nav-link">Reporte de Ventas</a></li>
                 <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link">Punto de Venta</a></li>
-                <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link primary-link">Pedidos</a></li>
+                <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link">Pedidos</a></li>
 
                 {% elif session.get('rol') == 'empleado' %}
                 <li><a href="{{url_for('home')}}" class="hw-nav-link">Panel de Control</a></li>
                 <li><a href="{{url_for('seccionVentas')}}" class="hw-nav-link">Punto de Venta</a></li>
                 <li><a href="{{url_for('verListaProductos')}}" class="hw-nav-link">Productos</a></li>
-                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link warning-link">Stock Crítico</a></li>
-                <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link primary-link">Pedidos</a></li>
+                <li><a href="{{url_for('verStockCritico')}}" class="hw-nav-link">Stock Crítico</a></li>
+                <li><a href="{{url_for('pedidos.ver_pendientes')}}" class="hw-nav-link">Pedidos</a></li>
 
                 {% elif session.get('rol') == 'cliente' %}
                 <li><a href="{{url_for('catalogoCliente')}}" class="hw-nav-link">Catálogo</a></li>
-                <li><a href="{{url_for('pedidos.mis_pedidos')}}" class="hw-nav-link primary-link">Mis Pedidos</a></li>
+                <li><a href="{{url_for('pedidos.mis_pedidos')}}" class="hw-nav-link">Mis Pedidos</a></li>
                 <li><a href="{{url_for('miPerfil')}}" class="hw-nav-link">Mi Perfil</a></li>
 
                 {% else %}
@@ -54,10 +54,10 @@
                 {% endif %}
 
                 {% if session.get('id_usuario') %}
-                <li><span class="hw-nav-link" style="opacity: 0.8;">{{ session.get('nombre') }}</span></li>
+                <li><span class="hw-nav-link">{{ session.get('nombre') }}</span></li>
                 <li><a href="{{url_for('auth.logout')}}" class="hw-nav-link">Salir</a></li>
                 {% else %}
-                <li><a href="{{url_for('auth.login')}}" class="hw-nav-link primary-link">Iniciar sesión</a></li>
+                <li><a href="{{url_for('auth.login')}}" class="hw-nav-link">Iniciar sesión</a></li>
                 {% endif %}
 
             </ul>
