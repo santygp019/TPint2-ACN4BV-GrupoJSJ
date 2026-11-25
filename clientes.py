@@ -1,5 +1,5 @@
 from flask import request, render_template, redirect, url_for, session
-from db import Session, Cliente
+from db import Session, Cliente, Usuario
 
 
 ## Valida los datos del formulario, devuelve un mensaje de error o None si esta todo bien
@@ -96,12 +96,17 @@ def darBajaCliente(id_cliente):
 
     if cliente:
         cliente.activo = False
+
+        # también desactivamos el usuario de ese cliente, para que no pueda ingresar
+        usuario = db_cursor.query(Usuario).filter_by(fk_id_cliente=cliente.id_cliente).first()
+        if usuario:
+            usuario.activo = False
+
         db_cursor.commit()
 
     db_cursor.close()
 
     return redirect(url_for("cargarCliente"))
-
 
 def verMiPerfil():
     id_cliente = session.get("id_cliente")
