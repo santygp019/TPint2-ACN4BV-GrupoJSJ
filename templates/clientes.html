@@ -36,8 +36,8 @@
             {% for cli in clientes %}
             <tr>
                 <td style="font-weight: bold;">{{cli.nombre}}</td>
-                <td>{{cli.email}}</td>
-                <td>{{cli.telefono}}</td>
+                <td>{{ cli.email or '' }}</td>
+                <td>{{ cli.telefono or '' }}</td>
                 <td>
                     <a href="{{url_for('modificarCliente', id_cliente=cli.id_cliente)}}" class="ventas-link" style="margin-right: 15px;">Editar</a>
                     
