@@ -40,6 +40,9 @@ def requiere_rol(*roles_permitidos):
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if session.get("id_usuario"):
+        return redirect(url_for("home"))
+
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         clave = request.form.get("clave", "")
@@ -66,6 +69,9 @@ def login():
 
 @auth_bp.route('/registro', methods=['GET', 'POST'])
 def registro():
+    if session.get("id_usuario"):
+        return redirect(url_for("home"))
+
     if request.method == "POST":
         nombre = request.form.get("nombre", "").strip()
         email = request.form.get("email", "").strip().lower()
