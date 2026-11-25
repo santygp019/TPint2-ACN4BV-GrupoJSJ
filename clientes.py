@@ -127,7 +127,7 @@ def verMiPerfil():
 
     if request.method == "POST":
         nombre = request.form["nombre"].strip()
-        email = request.form["email"].strip()
+        email = cliente.email or ""
         telefono = request.form["telefono"].strip()
 
         error = validarCliente(nombre, email, telefono)

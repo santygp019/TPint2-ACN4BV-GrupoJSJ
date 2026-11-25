@@ -19,8 +19,8 @@
             </div>
             
             <div>
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Email:</label>
-                <input type="email" name="email" class="ventas-input" value="{{ cliente.email or '' }}" style="width: 100%; box-sizing: border-box;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Email (no se puede cambiar):</label>
+                <input type="email" name="email" class="ventas-input" value="{{ cliente.email or '' }}" readonly style="width: 100%; box-sizing: border-box; background-color: #e5e7eb;">
             </div>
 
             <div>
