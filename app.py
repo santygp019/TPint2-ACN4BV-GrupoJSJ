@@ -83,7 +83,7 @@ def cargarProducto():
 def modificarProducto(id_producto):
     return editarProducto(id_producto)
 
-@app.route("/eliminar_producto/<int:id_producto>")
+@app.route("/eliminar_producto/<int:id_producto>", methods=["POST"])
 @requiere_rol("administrador")
 def borrarProducto(id_producto):
     return eliminarProducto(id_producto)

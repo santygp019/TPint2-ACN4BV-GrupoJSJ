@@ -28,7 +28,9 @@
                 {% if session.get('rol') == 'administrador' %}
                 <td>
                     <a href="{{ url_for('modificarProducto', id_producto=pro.id_producto) }}" class="ventas-link" style="margin-right: 15px;">Editar</a>
-                    <a href="{{ url_for('borrarProducto', id_producto=pro.id_producto) }}" onclick="return confirm('¿Estás seguro que desea eliminar este producto?')" style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
+                    <form action="{{ url_for('borrarProducto', id_producto=pro.id_producto) }}" method="post" onsubmit="return confirm('¿Estás seguro que desea eliminar este producto?')" style="display: inline;">
+                        <button type="submit" style="background: none; border: none; padding: 0; color: red; font-weight: bold; cursor: pointer; font: inherit;">Eliminar</button>
+                    </form>
                 </td>
                 {% else %}
                 <td style="font-weight: bold;">{{ pro.stock }} un.</td>
