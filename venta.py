@@ -3,6 +3,11 @@ from db import Session, Producto, Cliente, Venta, DetalleVenta, Pedido, DetalleP
 from sqlalchemy import or_, cast, String, func, desc
 from datetime import datetime, timedelta
 
+
+def formatear_precio(valor):
+    return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
 def ventaProducto():
     db_cursor = Session()
     try:
@@ -19,30 +24,34 @@ def ventaProducto():
                 flash("La cantidad tiene que ser mayor a cero.")
                 return redirect(url_for("seccionVentas"))
 
-            producto = db_cursor.query(Producto).filter_by(id_producto=id_producto).first()
+            producto = db_cursor.query(Producto).filter_by(id_producto=id_producto, activo=True).first()
 
-            if producto and producto.stock >= cantidad_vendida:
-                ## Descontamos el stock
-                producto.stock -= cantidad_vendida
-
-                nueva_venta = Venta()
-                db_cursor.add(nueva_venta)
-                db_cursor.flush()  # esto permite obtener el id de la venta antes del commit.
-
-                detalle = DetalleVenta(
-                    fk_id_venta=nueva_venta.id_venta,
-                    fk_id_producto=producto.id_producto,
-                    cantidad=cantidad_vendida,
-                    precio_venta=producto.precio
-                )
-                db_cursor.add(detalle)
-                db_cursor.commit()
-
-                total = cantidad_vendida * producto.precio
-                flash("Venta registrada: " + str(cantidad_vendida) + " x " + producto.nombre + " | Total a cobrar: $" + str(round(total, 2)))
+            if not producto:
+                flash("El producto seleccionado no existe o no está disponible.")
                 return redirect(url_for("seccionVentas"))
 
-            flash("No hay stock suficiente o el producto no existe.")
+            if producto.stock < cantidad_vendida:
+                flash(f"No hay stock suficiente. Stock disponible: {producto.stock}.")
+                return redirect(url_for("seccionVentas"))
+
+            ## Descontamos el stock
+            producto.stock -= cantidad_vendida
+
+            nueva_venta = Venta()
+            db_cursor.add(nueva_venta)
+            db_cursor.flush()  # esto permite obtener el id de la venta antes del commit.
+
+            detalle = DetalleVenta(
+                fk_id_venta=nueva_venta.id_venta,
+                fk_id_producto=producto.id_producto,
+                cantidad=cantidad_vendida,
+                precio_venta=producto.precio
+            )
+            db_cursor.add(detalle)
+            db_cursor.commit()
+
+            total = cantidad_vendida * producto.precio
+            flash(f"Venta registrada: {cantidad_vendida} x {producto.nombre} | Total a cobrar: ${formatear_precio(total)}")
             return redirect(url_for("seccionVentas"))
 
         # Atrapamos el texto que viene del formulario HTML
@@ -69,10 +78,11 @@ def ventaProducto():
     finally:
         db_cursor.close()
 
+
 def procesarCompraCatalogo():
     db_cursor = Session()
     try:
-        #LÓGICA DE COMPRA (POST)
+        # LÓGICA DE COMPRA (POST)
         if request.method == "POST":
             # 1) tiene que haber iniciado sesión como cliente
             id_cliente = session.get("id_cliente")
@@ -88,34 +98,42 @@ def procesarCompraCatalogo():
                 flash("La cantidad tiene que ser un número entero.")
                 return redirect(url_for("catalogoCliente"))
 
-            producto = db_cursor.query(Producto).filter_by(id_producto=id_producto).first()
+            if cantidad_pedida <= 0:
+                flash("La cantidad tiene que ser mayor a cero.")
+                return redirect(url_for("catalogoCliente"))
 
-            if producto and cantidad_pedida > 0 and producto.stock >= cantidad_pedida:
-                # 2) reservar el stock
-                producto.stock -= cantidad_pedida
+            producto = db_cursor.query(Producto).filter_by(id_producto=id_producto, activo=True).first()
 
-                # 3) crear el pedido a nombre del cliente
-                nuevo_pedido = Pedido(fk_id_cliente=id_cliente)
-                db_cursor.add(nuevo_pedido)
-                db_cursor.flush()
+            if not producto:
+                flash("El producto seleccionado no existe o no está disponible.")
+                return redirect(url_for("catalogoCliente"))
 
-                # 4) crear el detalle del pedido
-                detalle = DetallePedido(
-                    fk_id_pedido=nuevo_pedido.id_pedido,
-                    fk_id_producto=producto.id_producto,
-                    cantidad=cantidad_pedida,
-                    precio_unitario=producto.precio
-                )
-                db_cursor.add(detalle)
-                db_cursor.commit()
+            if producto.stock < cantidad_pedida:
+                flash(f"No hay stock suficiente para ese pedido. Stock disponible: {producto.stock}.")
+                return redirect(url_for("catalogoCliente"))
 
-                flash("Pedido enviado: queda pendiente de confirmación del vendedor.")
-            else:
-                flash("No hay stock suficiente para ese pedido.")
+            # 2) reservar el stock
+            producto.stock -= cantidad_pedida
 
+            # 3) crear el pedido a nombre del cliente
+            nuevo_pedido = Pedido(fk_id_cliente=id_cliente)
+            db_cursor.add(nuevo_pedido)
+            db_cursor.flush()
+
+            # 4) crear el detalle del pedido
+            detalle = DetallePedido(
+                fk_id_pedido=nuevo_pedido.id_pedido,
+                fk_id_producto=producto.id_producto,
+                cantidad=cantidad_pedida,
+                precio_unitario=producto.precio
+            )
+            db_cursor.add(detalle)
+            db_cursor.commit()
+
+            flash("Pedido enviado: queda pendiente de confirmación del vendedor.")
             return redirect(url_for("catalogoCliente"))
 
-        #LÓGICA DEL BUSCADOR Y CATÁLOGO (GET)
+        # LÓGICA DEL BUSCADOR Y CATÁLOGO (GET)
         texto_buscado = request.args.get("busqueda")
         query = db_cursor.query(Producto).filter(Producto.activo == True, Producto.stock > 0)
 
@@ -131,6 +149,7 @@ def procesarCompraCatalogo():
         return render_template("catalogo.html", productos=productos)
     finally:
         db_cursor.close()
+
 
 def reporteVentas():
     db_cursor = Session()

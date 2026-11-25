@@ -38,6 +38,12 @@ def hora_ar(fecha):
         return ""
     return (fecha - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M")
 
+@app.template_filter("precio_ar")
+def precio_ar(valor):
+    if valor is None:
+        return "0,00"
+    return f"{float(valor):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 @app.route("/")
 def home():
     resumen = None

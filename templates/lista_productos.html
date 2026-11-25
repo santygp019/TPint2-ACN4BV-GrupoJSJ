@@ -23,7 +23,7 @@
             {% for pro in productos %}
             <tr>
                 <td style="font-weight: bold;">{{ pro.nombre }}</td>
-                <td>${{ pro.precio }}</td>
+                <td>${{ pro.precio | precio_ar }}</td>
                 <td>{{ pro.categoria.nombre }}</td>
                 {% if session.get('rol') == 'administrador' %}
                 <td>
