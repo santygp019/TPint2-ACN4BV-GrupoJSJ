@@ -5,6 +5,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
 from db import Session, Usuario, Cliente
+from clientes import validarCliente
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -81,6 +83,10 @@ def registro():
 
         if not nombre or not email or not clave:
             flash("Completá nombre, email y clave.")
+            return redirect(url_for("auth.registro"))
+        error = validarCliente(nombre, email, telefono)
+        if error:
+            flash(error)
             return redirect(url_for("auth.registro"))
 
         if len(clave) < 6:
