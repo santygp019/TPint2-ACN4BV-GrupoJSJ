@@ -24,7 +24,7 @@
 
             <div>
                 <label class="form-label">Stock Actual:</label>
-                <input type="number" min="0" name="stock" class="ventas-input input-full" value="{{ producto.stock or '' }}" required>
+                <input type="number" min="0" name="stock" class="ventas-input input-full" value="{{ producto.stock if producto.stock is not none else ''  }}" required>
             </div>
 
             <div class="acciones-form">
