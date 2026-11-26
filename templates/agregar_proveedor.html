@@ -4,17 +4,17 @@
 
 {% block content %}
 <div class="ventas-container">
-    <h2 style="margin-top: 0; color: var(--hw-dark);">Gestión de Proveedores</h2>
-    
-    <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
+    <h2 class="titulo-seccion">Gestión de Proveedores</h2>
+
+    <div class="card-panel">
         <h3>Agregar Proveedor</h3>
 
         {% if error %}
-        <p style="color: #991b1b; font-weight: bold; background-color: #fee2e2; padding: 10px; border-radius: 4px; margin-bottom: 15px;">{{ error }}</p>
+        <p class="alerta-error">{{ error }}</p>
         {% endif %}
 
-        <form action="" method="post" style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" name="nombre" class="ventas-input" placeholder="Nombre del proveedor" required style="flex-grow: 1; max-width: 400px;">
+        <form action="{{ url_for('cargarProveedor') }}" method="post" class="form-inline">
+            <input type="text" name="nombre" class="ventas-input input-busqueda" placeholder="Nombre del proveedor" required>
             <button type="submit" class="ventas-btn">Agregar</button>
         </form>
     </div>
@@ -28,11 +28,11 @@
         <tbody>
             {% for prov in proveedores %}
             <tr>
-                <td style="font-weight: bold;">{{ prov.nombre }}</td>
+                <td class="texto-bold">{{ prov.nombre }}</td>
             </tr>
             {% else %}
             <tr>
-                <td style="text-align: center; color: gray; font-style: italic; padding: 20px;">No hay proveedores registrados aún.</td>
+                <td class="texto-vacio">No hay proveedores registrados aún.</td>
             </tr>
             {% endfor %}
         </tbody>
