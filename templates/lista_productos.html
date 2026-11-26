@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="ventas-container">
-    <h2 style="margin-top: 0; color: var(--hw-dark);">Lista de Productos</h2>
-    
+    <h2 class="titulo-seccion">Lista de Productos</h2>
+
     <table class="ventas-table">
         <thead>
             <tr>
@@ -22,23 +22,23 @@
         <tbody>
             {% for pro in productos %}
             <tr>
-                <td style="font-weight: bold;">{{ pro.nombre }}</td>
+                <td class="texto-bold">{{ pro.nombre }}</td>
                 <td>${{ pro.precio | precio_ar }}</td>
                 <td>{{ pro.categoria.nombre }}</td>
                 {% if session.get('rol') == 'administrador' %}
                 <td>
-                    <a href="{{ url_for('modificarProducto', id_producto=pro.id_producto) }}" class="ventas-link" style="margin-right: 15px;">Editar</a>
-                    <form action="{{ url_for('borrarProducto', id_producto=pro.id_producto) }}" method="post" onsubmit="return confirm('¿Estás seguro que desea eliminar este producto?')" style="display: inline;">
-                        <button type="submit" style="background: none; border: none; padding: 0; color: red; font-weight: bold; cursor: pointer; font: inherit;">Eliminar</button>
+                    <a href="{{ url_for('modificarProducto', id_producto=pro.id_producto) }}" class="ventas-link accion-editar">Editar</a>
+                    <form action="{{ url_for('borrarProducto', id_producto=pro.id_producto) }}" method="post" class="form-accion" onsubmit="return confirm('¿Estás seguro que desea eliminar este producto?')">
+                        <button type="submit" class="accion-eliminar">Eliminar</button>
                     </form>
                 </td>
                 {% else %}
-                <td style="font-weight: bold;">{{ pro.stock }} un.</td>
+                <td class="texto-bold">{{ pro.stock }} un.</td>
                 {% endif %}
             </tr>
             {% else %}
             <tr>
-                <td colspan="4" style="text-align: center; color: gray; font-style: italic; padding: 20px;">No hay productos registrados.</td>
+                <td colspan="4" class="texto-vacio">No hay productos registrados.</td>
             </tr>
             {% endfor %}
         </tbody>

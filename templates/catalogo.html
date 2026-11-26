@@ -4,13 +4,12 @@
 
 {% block content %}
 <div class="ventas-container">
-    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Catálogo Público de Productos</h2>
+    <h2 class="titulo-seccion">Catálogo Público de Productos</h2>
 
-    <!-- Buscador alineado -->
-    <form method="GET" action="{{ url_for('catalogoCliente') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
-        <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar por nombre..." value="{{ request.args.get('busqueda', '') }}" style="flex-grow: 1; max-width: 400px;">
+    <form method="GET" action="{{ url_for('catalogoCliente') }}" class="form-inline form-inline-mb">
+        <input class="ventas-input input-busqueda" type="text" name="busqueda" placeholder="Buscar por nombre..." value="{{ request.args.get('busqueda', '') }}">
         <button class="ventas-btn" type="submit">Buscar</button>
-        <a class="ventas-btn" href="{{ url_for('catalogoCliente') }}" style="background-color: gray; text-decoration: none;">Limpiar</a>
+        <a class="ventas-btn btn-secundario" href="{{ url_for('catalogoCliente') }}">Limpiar</a>
     </form>
 
     {% if productos %}
@@ -25,29 +24,28 @@
         <tbody>
          {% for pro in productos %}
          <tr>
-            <td style="font-weight: bold;">{{ pro.nombre }}</td>
-            <td style="font-weight: bold; color: var(--hw-orange);">${{ pro.precio | precio_ar }}</td>
-            
+            <td class="texto-bold">{{ pro.nombre }}</td>
+            <td class="texto-naranja">${{ pro.precio | precio_ar }}</td>
             <td>
-                <span style="color: #15803d; font-weight: bold; margin-bottom: 8px; display: block;">Disponible ({{ pro.stock }} en stock)</span>
-                
+                <span class="estado-disponible">Disponible ({{ pro.stock }} en stock)</span>
+
                 {% if session.get('rol') == 'cliente' %}
-                <form action="{{ url_for('catalogoCliente') }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
+                <form action="{{ url_for('catalogoCliente') }}" method="POST" class="form-inline">
                     <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                    <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
-                    <button class="ventas-btn" type="submit" style="background-color: #15803d;">Hacer Pedido</button>
+                    <input class="ventas-input input-corto" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required>
+                    <button class="ventas-btn btn-verde" type="submit">Hacer Pedido</button>
                 </form>
                 {% elif not session.get('id_usuario') %}
-                <a href="{{ url_for('auth.login') }}" class="ventas-btn" style="text-decoration: none; display: inline-block;">Iniciar sesión para pedir</a>
+                <a href="{{ url_for('auth.login') }}" class="ventas-btn btn-secundario">Iniciar sesión para pedir</a>
                 {% endif %}
             </td>
          </tr>
-         {% endfor %}       
+         {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <div style="background-color: #fee2e2; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #ef4444; margin-top: 20px;">
-        <p style="color: #991b1b; font-weight: bold; margin: 0;">No hay productos disponibles que coincidan con tu búsqueda en este momento.</p>
+    <div class="alerta-vacia-roja">
+        No hay productos disponibles que coincidan con tu búsqueda en este momento.
     </div>
     {% endif %}
 </div>

@@ -4,13 +4,12 @@
 
 {% block content %}
 <div class="ventas-container">
-    <h2 style="margin-top: 0; color: var(--hw-dark); border-bottom: 2px solid var(--hw-orange); padding-bottom: 10px;">Punto de Venta</h2>
-      
-    <!-- Buscador alineado -->
-    <form method="GET" action="{{ url_for('seccionVentas') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
-        <input class="ventas-input" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}" style="flex-grow: 1; max-width: 400px;">
+    <h2 class="titulo-seccion">Punto de Venta</h2>
+
+    <form method="GET" action="{{ url_for('seccionVentas') }}" class="form-inline form-inline-mb">
+        <input class="ventas-input input-busqueda" type="text" name="busqueda" placeholder="Buscar nombre o código..." value="{{ request.args.get('busqueda', '') }}">
         <button class="ventas-btn" type="submit">Buscar</button>
-        <a class="ventas-btn" href="{{ url_for('seccionVentas') }}" style="background-color: gray; text-decoration: none;">Limpiar</a>
+        <a class="ventas-btn btn-secundario" href="{{ url_for('seccionVentas') }}">Limpiar</a>
     </form>
 
     {% if productos %}
@@ -26,33 +25,33 @@
         <tbody>
          {% for pro in productos %}
          <tr>
-            <td style="font-weight: bold;">{{ pro.nombre }}</td>
+            <td class="texto-bold">{{ pro.nombre }}</td>
             <td>${{ pro.precio | precio_ar }}</td>
             <td>
                 {{ pro.stock }}
                 {% if pro.stock == 0 %}
-                    <span style="color: white; background-color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; padding: 2px 6px; border-radius: 4px;">AGOTADO</span>
+                    <span class="badge-agotado">AGOTADO</span>
                 {% elif pro.stock <= 5 %}
-                    <span style="color: red; font-weight: bold; font-size: 0.85em; margin-left: 8px; border: 1px solid red; padding: 2px 4px; border-radius: 4px;">¡CRÍTICO!</span>
+                    <span class="badge-critico">¡CRÍTICO!</span>
                 {% endif %}
             </td>
             <td>
                 {% if pro.stock > 0 %}
-                    <form action="{{ url_for('seccionVentas') }}" method="POST" style="display: flex; gap: 10px; align-items: center;" onsubmit='return confirm("¿Confirmás la venta de " + this.cantidad.value + " x " + {{ pro.nombre|tojson }} + "?")'>
+                    <form action="{{ url_for('seccionVentas') }}" method="POST" class="form-inline" onsubmit='return confirm("¿Confirmás la venta de " + this.cantidad.value + " x " + {{ pro.nombre|tojson }} + "?")'>
                         <input type="hidden" name="id_producto" value="{{ pro.id_producto }}">
-                        <input class="ventas-input" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required style="width: 70px;">
+                        <input class="ventas-input input-corto" type="number" name="cantidad" min="1" max="{{ pro.stock }}" value="1" required>
                         <button class="ventas-btn" type="submit">Vender</button>
                     </form>
                 {% else %}
-                    <span style="color: gray; font-style: italic;">Sin stock</span>
+                    <span class="texto-sin-stock">Sin stock</span>
                 {% endif %}
             </td>
          </tr>
-         {% endfor %}       
+         {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p style="color: red; font-weight: bold;">No se encontraron productos.</p>
+    <p class="alerta-error">No se encontraron productos.</p>
     {% endif %}
 </div>
 {% endblock %}

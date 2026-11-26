@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="ventas-container">
-    <h2 style="margin-top: 0; color: #ef4444; border-bottom: 2px solid #ef4444; padding-bottom: 10px;">⚠️ Reporte de Stock Crítico</h2>
-    <p style="color: var(--hw-gray); margin-bottom: 20px;">Los siguientes productos tienen 5 unidades o menos en inventario y requieren reposición inmediata:</p>
+    <h2 class="titulo-critico">⚠️ Reporte de Stock Crítico</h2>
+    <p class="subtitulo-seccion">Los siguientes productos tienen 5 unidades o menos en inventario y requieren reposición inmediata:</p>
 
     <table class="ventas-table">
         <thead>
@@ -18,19 +18,19 @@
         </thead>
         <tbody>
             {% for pro in productos %}
-            <tr style="background-color: {% if pro.stock == 0 %}#fee2e2{% else %}#fef3c7{% endif %};">
-                <td style="font-weight: bold; color: #991b1b;">{{ pro.nombre }}</td>
+            <tr class="{{ 'fila-agotado' if pro.stock == 0 else 'fila-bajo-stock' }}">
+                <td class="texto-bold">{{ pro.nombre }}</td>
                 <td>{{ pro.categoria.nombre }}</td>
-                <td style="font-weight: bold; font-size: 1.1em; color: {% if pro.stock == 0 %}red{% else %}#b45309{% endif %};">
+                <td class="{{ 'stock-agotado-txt' if pro.stock == 0 else 'stock-bajo-txt' }}">
                     {{ pro.stock }} un.
                 </td>
                 <td>
-                    <a href="/compras/nueva" class="ventas-link" style="color: #065f46;">Comprar a proveedor</a>
+                    <a href="{{ url_for('ver_compras') }}" class="ventas-link link-reposicion">Comprar a proveedor</a>
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="4" style="text-align: center; color: #15803d; font-weight: bold; padding: 30px;">
+                <td colspan="4" class="stock-optimo-celda">
                     ✅ El inventario está en niveles óptimos. No hay stock crítico.
                 </td>
             </tr>
