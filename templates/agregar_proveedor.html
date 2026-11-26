@@ -8,6 +8,11 @@
     
     <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
         <h3>Agregar Proveedor</h3>
+
+        {% if error %}
+        <p style="color: #991b1b; font-weight: bold; background-color: #fee2e2; padding: 10px; border-radius: 4px; margin-bottom: 15px;">{{ error }}</p>
+        {% endif %}
+
         <form action="" method="post" style="display: flex; gap: 10px; align-items: center;">
             <input type="text" name="nombre" class="ventas-input" placeholder="Nombre del proveedor" required style="flex-grow: 1; max-width: 400px;">
             <button type="submit" class="ventas-btn">Agregar</button>
