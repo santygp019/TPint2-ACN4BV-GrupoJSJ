@@ -1,15 +1,13 @@
-
 :root {
-  --hw-dark: #111827;         
-  --hw-gray: #1f2937;         
-  --hw-border: #374151;      
-  --hw-light: #f3f4f6;       
+  --hw-dark: #111827;
+  --hw-gray: #1f2937;
+  --hw-border: #374151;
+  --hw-light: #f3f4f6;
   --hw-white: #ffffff;
-  --hw-orange: #ea580c;       
+  --hw-orange: #ea580c;
   --hw-orange-hover: #c2410c;
-  --hw-yellow: #eab308;       
+  --hw-yellow: #eab308;
 }
-
 
 body {
   margin: 0;
@@ -18,7 +16,7 @@ body {
   color: var(--hw-gray);
 }
 
-
+/* --- ENCABEZADO --- */
 .hw-header {
   background-color: var(--hw-dark);
   color: var(--hw-white);
@@ -26,19 +24,42 @@ body {
 }
 
 .hw-brand {
-  padding: 1.5rem 2rem;
-  border-bottom: 4px solid var(--hw-orange); 
+  padding: 1.25rem 2rem;
+  border-bottom: 4px solid var(--hw-orange);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .hw-brand h1 {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 800;
-  text-transform: uppercase; 
+  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
+.hw-brand-link {
+  color: var(--hw-white);
+  text-decoration: none;
+}
 
+.hw-dolar-badge {
+  background-color: var(--hw-gray);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--hw-border);
+  font-size: 0.9rem;
+}
+
+.hw-dolar-label {
+  color: var(--hw-yellow);
+  font-weight: bold;
+}
+
+/* --- BARRA DE NAVEGACIÓN --- */
 .hw-navbar {
   background-color: var(--hw-gray);
   padding: 0 1rem;
@@ -46,60 +67,110 @@ body {
 
 .hw-nav-list {
   display: flex;
-  flex-wrap: wrap; 
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.hw-nav-item {
+  position: relative;
+}
+
 .hw-nav-link {
   display: block;
-  padding: 1rem 1.25rem;
-  color: #d1d5db; 
+  padding: 1rem 1.2rem;
+  color: #d1d5db;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
   border-left: 1px solid var(--hw-border);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
 }
 
-.hw-nav-list li:first-child .hw-nav-link {
-  border-left: none; 
+.hw-nav-list > li:first-child .hw-nav-link {
+  border-left: none;
 }
 
-/* Efecto al pasar el mouse */
 .hw-nav-link:hover {
   background-color: var(--hw-border);
   color: var(--hw-white);
 }
 
+.hw-nav-user {
+  cursor: default;
+}
 
+.hw-nav-user:hover {
+  background-color: transparent;
+  color: #d1d5db;
+}
 
+/* --- MENÚ DESPLEGABLE (ADMIN) --- */
+.hw-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 210px;
+  background-color: var(--hw-dark);
+  border: 1px solid var(--hw-border);
+  border-top: 3px solid var(--hw-orange);
+  border-radius: 0 0 6px 6px;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 100;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
 
-.hw-nav-link.primary-link {
+.hw-dropdown:hover .hw-dropdown-menu,
+.hw-dropdown:focus-within .hw-dropdown-menu {
+  display: block;
+}
+
+.hw-dropdown-link {
+  display: block;
+  padding: 0.7rem 1rem;
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.hw-dropdown-link:hover {
   background-color: var(--hw-orange);
   color: var(--hw-white);
-  font-weight: 700;
 }
 
-.hw-nav-link.primary-link:hover {
-  background-color: var(--hw-orange-hover);
-}
-
-
-.hw-nav-link.warning-link {
-  color: var(--hw-yellow);
-  font-weight: 600;
-}
-
-.hw-nav-link.warning-link:hover {
-  background-color: rgba(234, 179, 8, 0.1); 
-  color: var(--hw-yellow);
-}
-
-
+/* --- CONTENEDOR PRINCIPAL Y AVISOS FLASH --- */
 .hw-main-content {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.flash-msg {
+  max-width: 1100px;
+  margin: 0 auto 16px auto;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  border-left: 4px solid;
+}
+
+.flash-exito {
+  background-color: #dcfce7;
+  color: #15803d;
+  border-color: #15803d;
+}
+
+.flash-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-color: #b91c1c;
 }
